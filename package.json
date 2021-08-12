@@ -1,27 +1,11 @@
 {
-  "name": "@gemunionstudio/nestjs-sqs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test:e2e": "npx jest --config=jest-e2e.config.js --detectOpenHandles --runInBand --forceExit",
-    "build": "npx rimraf -rf dist && tsc -p tsconfig.json",
-    "format": "npx prettier --write **/*.{ts,json}",
-    "lint": "npx eslint \"lib/**/*.ts\" --fix"
-  },
-  "bugs": {
-    "url": "https://github.com/gemunionstudio/nestjs-sqs/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gemunionstudio/nestjs-sqs.git"
-  },
-  "keywords": [],
   "author": {
     "email": "ssut@ssut.me",
     "name": "Suhun Han",
     "url": "https://github.com/ssut"
+  },
+  "bugs": {
+    "url": "https://github.com/gemunionstudio/nestjs-sqs/issues"
   },
   "contributors": [
     {
@@ -30,13 +14,13 @@
       "url": "https://github.com/trejgun"
     }
   ],
-  "license": "MIT",
   "dependencies": {
-    "sqs-consumer": "^5.4.0",
-    "sqs-producer": "^2.0.2",
+    "@nestjs-plus/discovery": "^2.0.2",
     "aws-sdk": "^2.728.0",
-    "@nestjs-plus/discovery": "^2.0.2"
+    "sqs-consumer": "^5.4.0",
+    "sqs-producer": "^2.0.2"
   },
+  "description": "",
   "devDependencies": {
     "@nestjs/common": "^7.4.2",
     "@nestjs/core": "^7.4.2",
@@ -61,8 +45,24 @@
     "typescript": "^3.9.7",
     "wait-for-expect": "^3.0.2"
   },
+  "keywords": [],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "@gemunionstudio/nestjs-sqs",
   "peerDependencies": {
     "@nestjs/common": "^6.10.11 || ^7.0.0",
     "@nestjs/core": "^6.10.11 || ^7.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemunionstudio/nestjs-sqs.git"
+  },
+  "scripts": {
+    "build": "npx rimraf -rf dist && tsc -p tsconfig.json",
+    "format": "npx prettier --write **/*.{ts,json}",
+    "lint": "npx eslint \"lib/**/*.ts\" --fix",
+    "test:e2e": "npx jest --config=jest-e2e.config.js --detectOpenHandles --runInBand --forceExit"
+  },
+  "types": "dist/index.d.ts",
+  "version": "1.0.0"
 }
