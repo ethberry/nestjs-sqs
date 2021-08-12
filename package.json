@@ -23,9 +23,9 @@
   "description": "",
   "devDependencies": {
     "@gemunionstudio/eslint-config": "0.1.8",
-    "@nestjs/common": "7.6.18",
-    "@nestjs/core": "7.6.18",
-    "@nestjs/testing": "7.6.18",
+    "@nestjs/common": "8.0.6",
+    "@nestjs/core": "8.0.6",
+    "@nestjs/testing": "8.0.6",
     "@types/jest": "26.0.24",
     "@typescript-eslint/eslint-plugin": "4.29.1",
     "@typescript-eslint/parser": "4.29.1",
@@ -45,7 +45,7 @@
     "prettier": "2.3.2",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
-    "rxjs": "6.6.7",
+    "rxjs": "7.3.0",
     "ts-jest": "26.5.6",
     "ts-node": "8.10.2",
     "tsc-watch": "4.4.0",
@@ -58,8 +58,8 @@
   "main": "dist/index.js",
   "name": "@gemunionstudio/nestjs-sqs",
   "peerDependencies": {
-    "@nestjs/common": "6.10.11 || 7.0.0",
-    "@nestjs/core": "6.10.11 || 7.0.0"
+    "@nestjs/common": "^8",
+    "@nestjs/core": "^8"
   },
   "repository": {
     "type": "git",
