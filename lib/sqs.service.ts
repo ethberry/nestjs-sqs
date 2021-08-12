@@ -1,33 +1,33 @@
-import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { Consumer } from 'sqs-consumer';
-import { Producer } from 'sqs-producer';
-import { Message, QueueName, SqsConsumerEventHandlerMeta, SqsMessageHandlerMeta, SqsOptions } from './sqs.types';
-import { DiscoveryService } from '@nestjs-plus/discovery';
-import { SQS_CONSUMER_EVENT_HANDLER, SQS_CONSUMER_METHOD, SQS_OPTIONS } from './sqs.constants';
-import * as AWS from 'aws-sdk';
-import type { QueueAttributeName } from 'aws-sdk/clients/sqs';
+import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { Consumer } from "sqs-consumer";
+import { Producer } from "sqs-producer";
+import { IMessage, QueueName, ISqsConsumerEventHandlerMeta, ISqsMessageHandlerMeta, ISqsOptions } from "./sqs.types";
+import { DiscoveryService } from "@nestjs-plus/discovery";
+import { SQS_CONSUMER_EVENT_HANDLER, SQS_CONSUMER_METHOD, SQS_OPTIONS } from "./sqs.constants";
+import * as AWS from "aws-sdk";
+import type { QueueAttributeName } from "aws-sdk/clients/sqs";
 
 @Injectable()
 export class SqsService implements OnModuleInit, OnModuleDestroy {
   public readonly consumers = new Map<QueueName, Consumer>();
   public readonly producers = new Map<QueueName, Producer>();
 
-  private readonly logger = new Logger('SqsService', false);
+  private readonly logger = new Logger("SqsService", false);
 
   public constructor(
-    @Inject(SQS_OPTIONS) public readonly options: SqsOptions,
+    @Inject(SQS_OPTIONS) public readonly options: ISqsOptions,
     private readonly discover: DiscoveryService,
   ) {}
 
   public async onModuleInit(): Promise<void> {
-    const messageHandlers = await this.discover.providerMethodsWithMetaAtKey<SqsMessageHandlerMeta>(
+    const messageHandlers = await this.discover.providerMethodsWithMetaAtKey<ISqsMessageHandlerMeta>(
       SQS_CONSUMER_METHOD,
     );
-    const eventHandlers = await this.discover.providerMethodsWithMetaAtKey<SqsConsumerEventHandlerMeta>(
+    const eventHandlers = await this.discover.providerMethodsWithMetaAtKey<ISqsConsumerEventHandlerMeta>(
       SQS_CONSUMER_EVENT_HANDLER,
     );
 
-    this.options.consumers?.forEach((options) => {
+    this.options.consumers?.forEach(options => {
       const { name, ...consumerOptions } = options;
       if (this.consumers.has(name)) {
         throw new Error(`Consumer already exists: ${name}`);
@@ -38,16 +38,16 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
         this.logger.warn(`No metadata found for: ${name}`);
       }
 
-      const isBatchHandler = metadata.meta.batch === true;
+      const isBatchHandler = metadata?.meta.batch === true;
       const consumer = Consumer.create({
         ...consumerOptions,
         ...(isBatchHandler
           ? {
-              handleMessageBatch: metadata.discoveredMethod.handler.bind(
+              handleMessageBatch: metadata?.discoveredMethod.handler.bind(
                 metadata.discoveredMethod.parentClass.instance,
               ),
             }
-          : { handleMessage: metadata.discoveredMethod.handler.bind(metadata.discoveredMethod.parentClass.instance) }),
+          : { handleMessage: metadata?.discoveredMethod.handler.bind(metadata.discoveredMethod.parentClass.instance) }),
       });
 
       const eventsMetadata = eventHandlers.filter(({ meta }) => meta.name === name);
@@ -55,14 +55,14 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
         if (eventMetadata) {
           consumer.addListener(
             eventMetadata.meta.eventName,
-            eventMetadata.discoveredMethod.handler.bind(metadata.discoveredMethod.parentClass.instance),
+            eventMetadata.discoveredMethod.handler.bind(metadata?.discoveredMethod.parentClass.instance),
           );
         }
       }
       this.consumers.set(name, consumer);
     });
 
-    this.options.producers?.forEach((options) => {
+    this.options.producers?.forEach(options => {
       const { name, ...producerOptions } = options;
       if (this.producers.has(name)) {
         throw new Error(`Producer already exists: ${name}`);
@@ -93,7 +93,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
       queueUrl: string;
     };
     if (!sqs) {
-      throw new Error('SQS instance does not exist');
+      throw new Error("SQS instance does not exist");
     }
 
     return {
@@ -116,7 +116,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
     const response = await sqs
       .getQueueAttributes({
         QueueUrl: queueUrl,
-        AttributeNames: ['All'],
+        AttributeNames: ["All"],
       })
       .promise();
     return response.Attributes as { [key in QueueAttributeName]: string };
@@ -127,18 +127,18 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
       throw new Error(`Producer does not exist: ${name}`);
     }
 
-    return this.producers.get(name).queueSize();
+    return this.producers.get(name)!.queueSize();
   }
 
-  public send<T = any>(name: QueueName, payload: Message<T> | Message<T>[]) {
+  public send<T = any>(name: QueueName, payload: IMessage<T> | IMessage<T>[]) {
     if (!this.producers.has(name)) {
       throw new Error(`Producer does not exist: ${name}`);
     }
 
     const originalMessages = Array.isArray(payload) ? payload : [payload];
-    const messages = originalMessages.map((message) => {
+    const messages = originalMessages.map(message => {
       let body = message.body;
-      if (typeof body !== 'string') {
+      if (typeof body !== "string") {
         body = JSON.stringify(body) as any;
       }
 
@@ -148,7 +148,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
       };
     });
 
-    const producer = this.producers.get(name);
+    const producer = this.producers.get(name)!;
     return producer.send(messages as any[]);
   }
 }

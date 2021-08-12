@@ -1,8 +1,8 @@
-import { DynamicModule, Global, Module, Provider, Type } from '@nestjs/common';
-import { SqsService } from './sqs.service';
-import { SqsModuleAsyncOptions, SqsModuleOptionsFactory, SqsOptions } from './sqs.types';
-import { SQS_OPTIONS } from './sqs.constants';
-import { DiscoveryModule, DiscoveryService } from '@nestjs-plus/discovery';
+import { DynamicModule, Global, Module, Provider, Type } from "@nestjs/common";
+import { SqsService } from "./sqs.service";
+import { ISqsModuleAsyncOptions, ISqsModuleOptionsFactory, ISqsOptions } from "./sqs.types";
+import { SQS_OPTIONS } from "./sqs.constants";
+import { DiscoveryModule, DiscoveryService } from "@nestjs-plus/discovery";
 
 @Global()
 @Module({
@@ -11,38 +11,31 @@ import { DiscoveryModule, DiscoveryService } from '@nestjs-plus/discovery';
   exports: [SqsService],
 })
 export class SqsModule {
-  public static register(options: SqsOptions): DynamicModule {
+  public static register(options: ISqsOptions): DynamicModule {
     const sqsOptions: Provider = {
       provide: SQS_OPTIONS,
       useValue: options,
     };
     const sqsProvider: Provider = {
       provide: SqsService,
-      useFactory: (sqsOptions: SqsOptions, discover: DiscoveryService) => new SqsService(options, discover),
+      useFactory: (sqsOptions: ISqsOptions, discover: DiscoveryService) => new SqsService(options, discover),
       inject: [SQS_OPTIONS, DiscoveryService],
     };
 
     return {
       global: true,
       module: SqsModule,
-      imports: [
-        DiscoveryModule,
-      ],
-      providers: [
-        sqsOptions,
-        sqsProvider,
-      ],
-      exports: [
-        sqsProvider,
-      ],
+      imports: [DiscoveryModule],
+      providers: [sqsOptions, sqsProvider],
+      exports: [sqsProvider],
     };
   }
 
-  public static registerAsync(options: SqsModuleAsyncOptions): DynamicModule {
+  public static registerAsync(options: ISqsModuleAsyncOptions): DynamicModule {
     const asyncProviders = this.createAsyncProviders(options);
     const sqsProvider: Provider = {
       provide: SqsService,
-      useFactory: (options: SqsOptions, discover: DiscoveryService) => new SqsService(options, discover),
+      useFactory: (options: ISqsOptions, discover: DiscoveryService) => new SqsService(options, discover),
       inject: [SQS_OPTIONS, DiscoveryService],
     };
 
@@ -50,21 +43,16 @@ export class SqsModule {
       global: true,
       module: SqsModule,
       imports: [DiscoveryModule, ...(options.imports ?? [])],
-      providers: [
-        ...asyncProviders,
-        sqsProvider,
-      ],
-      exports: [
-        sqsProvider,
-      ],
+      providers: [...asyncProviders, sqsProvider],
+      exports: [sqsProvider],
     };
   }
 
-  private static createAsyncProviders(options: SqsModuleAsyncOptions): Provider[] {
+  private static createAsyncProviders(options: ISqsModuleAsyncOptions): Provider[] {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncOptionsProvider(options)];
     }
-    const useClass = options.useClass as Type<SqsModuleOptionsFactory>;
+    const useClass = options.useClass as Type<ISqsModuleOptionsFactory>;
     return [
       this.createAsyncOptionsProvider(options),
       {
@@ -74,21 +62,19 @@ export class SqsModule {
     ];
   }
 
-  private static createAsyncOptionsProvider(options: SqsModuleAsyncOptions): Provider {
+  private static createAsyncOptionsProvider(options: ISqsModuleAsyncOptions): Provider {
     if (options.useFactory) {
-    return {
-      provide: SQS_OPTIONS,
-      useFactory: options.useFactory,
-      inject: options.inject || [],
-    };
-  }
+      return {
+        provide: SQS_OPTIONS,
+        useFactory: options.useFactory,
+        inject: options.inject || [],
+      };
+    }
 
-    const inject = [
-      (options.useClass || options.useExisting) as Type<SqsModuleOptionsFactory>,
-    ];
+    const inject = [(options.useClass || options.useExisting) as Type<ISqsModuleOptionsFactory>];
     return {
       provide: SQS_OPTIONS,
-      useFactory: async (optionsFactory: SqsModuleOptionsFactory) => await optionsFactory.createOptions(),
+      useFactory: async (optionsFactory: ISqsModuleOptionsFactory) => await optionsFactory.createOptions(),
       inject,
     };
   }
