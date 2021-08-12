@@ -1,7 +1,7 @@
 # nestjs-sqs
 
-[![Test](https://github.com/ssut/nestjs-sqs/workflows/Test/badge.svg)](https://github.com/ssut/nestjs-sqs/actions?query=workflow%3ATest)
-[![npm version](https://badge.fury.io/js/%40ssut%2Fnestjs-sqs.svg)](https://badge.fury.io/js/%40ssut%2Fnestjs-sqs)
+[![Test](https://github.com/gemunionstudio/nestjs-sqs/workflows/Test/badge.svg)](https://github.com/gemunionstudio/nestjs-sqs/actions?query=workflow%3ATest)
+[![npm version](https://badge.fury.io/js/%40gemunionstudio%2Fnestjs-sqs.svg)](https://badge.fury.io/js/%40gemunionstudio%2Fnestjs-sqs)
 
 Tested with: [AWS SQS](https://aws.amazon.com/en/sqs/) and [ElasticMQ](https://github.com/softwaremill/elasticmq).
 
@@ -13,7 +13,7 @@ This library internally uses [bbc/sqs-producer](https://github.com/bbc/sqs-produ
 ## Installation
 
 ```shell script
-$ npm i --save @ssut/nestjs-sqs
+$ npm i --save @gemunionstudio/nestjs-sqs
 ```
 
 ## Quick Start
@@ -108,7 +108,7 @@ export class AppService {
 
 ### Configuration
 
-See [here](https://github.com/ssut/nestjs-sqs/blob/master/lib/sqs.types.ts), and note that we have same configuration as [bbc/sqs-consumer's](https://github.com/bbc/sqs-producer). 
+See [here](https://github.com/gemunionstudio/nestjs-sqs/blob/master/lib/sqs.types.ts), and note that we have same configuration as [bbc/sqs-consumer's](https://github.com/bbc/sqs-producer). 
 In most time you just need to specify both `name` and `queueUrl` at the minimum requirements.
 
 ## License

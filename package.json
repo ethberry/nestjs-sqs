@@ -1,5 +1,5 @@
 {
-  "name": "@ssut/nestjs-sqs",
+  "name": "@gemunionstudio/nestjs-sqs",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -11,14 +11,25 @@
     "lint": "npx eslint \"lib/**/*.ts\" --fix"
   },
   "bugs": {
-    "url": "https://github.com/ssut/nestjs-sqs/issues"
+    "url": "https://github.com/gemunionstudio/nestjs-sqs/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ssut/nestjs-sqs.git"
+    "url": "git+https://github.com/gemunionstudio/nestjs-sqs.git"
   },
   "keywords": [],
-  "author": "Suhun Han <ssut@ssut.me>",
+  "author": {
+    "email": "ssut@ssut.me",
+    "name": "Suhun Han",
+    "url": "https://github.com/ssut"
+  },
+  "contributors": [
+    {
+      "email": "TrejGun@gmail.com",
+      "name": "TrejGun",
+      "url": "https://github.com/trejgun"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "sqs-consumer": "^5.4.0",
