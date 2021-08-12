@@ -1,9 +1,17 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { SqsConsumerEventHandler, SqsMessageHandler, SqsModule, SqsService } from "../lib";
-import { SqsConsumerOptions, SqsProducerOptions } from "../lib/sqs.types";
 import { Injectable } from "@nestjs/common";
-import { SQS, Credentials } from "aws-sdk";
+import { Credentials, SQS } from "aws-sdk";
 import waitForExpect from "wait-for-expect";
+
+import {
+  SqsConsumerEvent,
+  SqsConsumerEventHandler,
+  SqsConsumerOptions,
+  SqsMessageHandler,
+  SqsModule,
+  SqsProducerOptions,
+  SqsService,
+} from "../src";
 
 const SQS_ENDPOINT = process.env.SQS_ENDPOINT || "http://localhost:9324";
 
@@ -75,17 +83,17 @@ describe("SqsModule", () => {
 
       @SqsMessageHandler(TestQueue.Test)
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      public handleTestMessage(message: AWS.SQS.Message) {
+      public handleTestMessage(message: SQS.Message) {
         fakeProcessor(message);
       }
 
-      @SqsConsumerEventHandler(TestQueue.Test, "processing_error")
-      public handleErrorEvent(err: Error, message: AWS.SQS.Message) {
+      @SqsConsumerEventHandler(TestQueue.Test, SqsConsumerEvent.PROCESSING_ERROR)
+      public handleErrorEvent(err: Error, message: SQS.Message) {
         fakeErrorEventHandler(err, message);
       }
 
       @SqsMessageHandler(TestQueue.DLQ)
-      public handleDLQMessage(message: AWS.SQS.Message) {
+      public handleDLQMessage(message: SQS.Message) {
         fakeDLQProcessor(message);
       }
     }

@@ -46,5 +46,16 @@ export interface ISqsMessageHandlerMeta {
 
 export interface ISqsConsumerEventHandlerMeta {
   name: string;
-  eventName: string;
+  eventName: SqsConsumerEvent;
+}
+
+export enum SqsConsumerEvent {
+  RESPONSE_PROCESSED = "response_processed",
+  EMPTY = "empty",
+  MESSAGE_RECEIVED = "message_received",
+  MESSAGE_PROCESSED = "message_processed",
+  ERROR = "error",
+  TIMEOUT_ERROR = "timeout_error",
+  PROCESSING_ERROR = "processing_error",
+  STOPPED = "stopped",
 }

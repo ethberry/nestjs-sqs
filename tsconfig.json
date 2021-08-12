@@ -14,7 +14,7 @@
     "noUnusedParameters": false,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "rootDir": "./lib",
+    "rootDir": "./src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strictBindCallApply": true,
@@ -22,8 +22,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "target": "es2017",
-    "lib": ["dom", "es2020.Promise"]
+    "lib": ["es2020.Promise"]
   },
-  "exclude": ["node_modules", "./dist"],
-  "include": ["./e2e"]
+  "exclude": ["node_modules", "./dist"]
 }

@@ -77,7 +77,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  public onModuleDestroy() {
+  public onModuleDestroy(): void {
     for (const consumer of this.consumers.values()) {
       consumer.stop();
     }
@@ -102,7 +102,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  public async purgeQueue(name: QueueName) {
+  public async purgeQueue(name: QueueName): Promise<any> {
     const { sqs, queueUrl } = this.getQueueInfo(name);
     return sqs
       .purgeQueue({
@@ -111,7 +111,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
       .promise();
   }
 
-  public async getQueueAttributes(name: QueueName) {
+  public async getQueueAttributes(name: QueueName): Promise<{ [key in QueueAttributeName]: string } | undefined> {
     const { sqs, queueUrl } = this.getQueueInfo(name);
     const response = await sqs
       .getQueueAttributes({
@@ -119,10 +119,10 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
         AttributeNames: ["All"],
       })
       .promise();
-    return response.Attributes as { [key in QueueAttributeName]: string };
+    return response.Attributes;
   }
 
-  public getProducerQueueSize(name: QueueName) {
+  public getProducerQueueSize(name: QueueName): Promise<number> {
     if (!this.producers.has(name)) {
       throw new Error(`Producer does not exist: ${name}`);
     }
@@ -130,7 +130,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
     return this.producers.get(name)!.queueSize();
   }
 
-  public send<T = any>(name: QueueName, payload: IMessage<T> | IMessage<T>[]) {
+  public send<T = any>(name: QueueName, payload: IMessage<T> | IMessage<T>[]): Promise<any> {
     if (!this.producers.has(name)) {
       throw new Error(`Producer does not exist: ${name}`);
     }
