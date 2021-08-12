@@ -1,10 +1,4 @@
 {
   "extends": ["github>gemunionstudio/renovate-config"],
   "baseBranches": ["master"],
-  "packageRules": [
-    {
-      "matchPackageNames": ["*"],
-      "automerge": false
-    }
-  ]
 }
