@@ -70,7 +70,7 @@
     "format": "npx prettier --write **/*.{ts,json}",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
-    "test:e2e": "npx jest --config=jest-e2e.config.json --detectOpenHandles --runInBand --forceExit"
+    "test:e2e": "npx jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "dist/index.d.ts",
   "version": "1.0.0"

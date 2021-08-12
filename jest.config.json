@@ -1,12 +1,11 @@
 {
+  "collectCoverageFrom": ["lib/**/*.{js,jsx,tsx,ts}", "!**/node_modules/**", "!**/*.spec.ts"],
+  "coverageDirectory": "coverage/e2e",
+  "coverageReporters": ["lcov"],
+  "moduleFileExtensions": ["ts", "js", "json"],
   "preset": "ts-jest",
-  "testEnvironment": "node",
-  "moduleFileExtensions": ["ts", "tsx", "js", "json"],
+  "testRegex": ".spec.ts$",
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
-  },
-  "testRegex": "/lib/.*\\.(test|spec).(ts|tsx|js)$",
-  "collectCoverageFrom": ["lib/**/*.{js,jsx,tsx,ts}", "!**/node_modules/**", "!**/vendor/**", "!**/*.spec.ts"],
-  "coverageReporters": ["lcov"],
-  "coverageDirectory": "coverage/unit"
+  }
 }
