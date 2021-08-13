@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "@nestjs-plus/discovery": "2.0.2",
-    "aws-sdk": "2.967.0",
+    "aws-sdk": "2.968.0",
     "sqs-consumer": "5.5.0",
     "sqs-producer": "2.1.0"
   },
