@@ -74,7 +74,6 @@
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
     "prepare": "npm run build",
-    "preversion": "npm run build && npm run test",
     "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "./dist/index.d.ts",
