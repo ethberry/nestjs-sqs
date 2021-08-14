@@ -5,7 +5,7 @@
     "url": "https://github.com/ssut"
   },
   "bugs": {
-    "url": "https://github.com/gemunionstudio/nestjs-sqs/issues"
+    "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
   "contributors": [
     {
@@ -23,7 +23,7 @@
   },
   "description": "",
   "devDependencies": {
-    "@gemunionstudio/eslint-config": "0.1.8",
+    "@gemunion/eslint-config": "0.1.8",
     "@nestjs/common": "8.0.6",
     "@nestjs/core": "8.0.6",
     "@nestjs/testing": "8.0.6",
@@ -56,14 +56,14 @@
   "keywords": [],
   "license": "MIT",
   "main": "dist/index.js",
-  "name": "@gemunionstudio/nestjs-sqs",
+  "name": "@gemunion/nestjs-sqs",
   "peerDependencies": {
     "@nestjs/common": "^8",
     "@nestjs/core": "^8"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gemunionstudio/nestjs-sqs.git"
+    "url": "git+https://github.com/gemunion/nestjs-sqs.git"
   },
   "scripts": {
     "build": "tsc",
