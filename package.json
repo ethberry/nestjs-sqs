@@ -18,7 +18,8 @@
     "@nestjs-plus/discovery": "2.0.2",
     "aws-sdk": "2.968.0",
     "sqs-consumer": "5.5.0",
-    "sqs-producer": "2.1.0"
+    "sqs-producer": "2.1.0",
+    "@golevelup/nestjs-modules": "0.4.2"
   },
   "description": "",
   "devDependencies": {
@@ -69,7 +70,7 @@
     "format": "npx prettier --write **/*.{ts,json}",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
-    "test:e2e": "npx jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
+    "test": "npx jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "dist/index.d.ts",
   "version": "1.0.0"

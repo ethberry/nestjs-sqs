@@ -25,7 +25,7 @@ Just register this module:
 ```ts
 @Module({
   imports: [
-    SqsModule.register({
+    SqsModule.forRoot({
       consumers: [],
       producers: [],
     }),
@@ -40,7 +40,7 @@ In such case, use `registerAsync()` method like many other Nest.js libraries.
 - Use factory
 
 ```ts
-SqsModule.registerAsync({
+SqsModule.forRootAsync({
   useFactory: () => {
     return {
       consumers: [],
@@ -53,7 +53,7 @@ SqsModule.registerAsync({
 - Use class
 
 ```ts
-SqsModule.registerAsync({
+SqsModule.forRootAsync({
   useClass: SqsConfigService,
 });
 ```
@@ -61,7 +61,7 @@ SqsModule.registerAsync({
 - Use existing
 
 ```ts
-SqsModule.registerAsync({
+SqsModule.forRootAsync({
   imports: [ConfigModule],
   useExisting: ConfigService,
 });
@@ -108,8 +108,21 @@ export class AppService {
 
 ### Configuration
 
-See [here](https://github.com/gemunionstudio/nestjs-sqs/blob/master/lib/sqs.types.ts), and note that we have same configuration as [bbc/sqs-consumer's](https://github.com/bbc/sqs-producer).
+See [here](https://github.com/gemunionstudio/nestjs-sqs/blob/master/lib/sqs.types.ts), and note that we have same configuration as
+[bbc/sqs-producer's](https://github.com/bbc/sqs-producer) and [bbc/sqs-consumer's](https://github.com/bbc/sqs-consumer).
 In most time you just need to specify both `name` and `queueUrl` at the minimum requirements.
+
+### Code quality
+
+Terminal 1
+```sh
+java -Dconfig.file=.github/build/elasticmq.conf -jar elasticmq-server-1.2.0.jar
+```
+
+Terminal 2
+```sh
+npm t
+```
 
 ## License
 

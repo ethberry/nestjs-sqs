@@ -1,11 +1,12 @@
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
-import { IMessage, QueueName, ISqsConsumerEventHandlerMeta, ISqsMessageHandlerMeta, ISqsOptions } from "./sqs.types";
 import { DiscoveryService } from "@nestjs-plus/discovery";
-import { SQS_CONSUMER_EVENT_HANDLER, SQS_CONSUMER_METHOD, SQS_OPTIONS } from "./sqs.constants";
-import * as AWS from "aws-sdk";
+import { SQS } from "aws-sdk";
 import type { QueueAttributeName } from "aws-sdk/clients/sqs";
+
+import { IMessage, QueueName, ISqsConsumerEventHandlerMeta, ISqsMessageHandlerMeta, ISqsOptions } from "./interfaces";
+import { SQS_CONSUMER_EVENT_HANDLER, SQS_CONSUMER_METHOD, SQS_OPTIONS } from "./sqs.constants";
 
 @Injectable()
 export class SqsService implements OnModuleInit, OnModuleDestroy {
@@ -89,7 +90,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
     }
 
     const { sqs, queueUrl } = (this.consumers.get(name) ?? this.producers.get(name)) as {
-      sqs: AWS.SQS;
+      sqs: SQS;
       queueUrl: string;
     };
     if (!sqs) {

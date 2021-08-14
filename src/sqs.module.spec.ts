@@ -3,15 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { Credentials, SQS } from "aws-sdk";
 import waitForExpect from "wait-for-expect";
 
-import {
-  SqsConsumerEvent,
-  SqsConsumerEventHandler,
-  SqsConsumerOptions,
-  SqsMessageHandler,
-  SqsModule,
-  SqsProducerOptions,
-  SqsService,
-} from "../src";
+import { SqsConsumerEventHandler, SqsMessageHandler, SqsModule, SqsService } from "../src";
+import { SqsConsumerEvent, SqsConsumerOptions, SqsProducerOptions } from "./interfaces";
 
 const SQS_ENDPOINT = process.env.SQS_ENDPOINT || "http://localhost:9324";
 
@@ -54,7 +47,7 @@ describe("SqsModule", () => {
     it("should register module async", async () => {
       module = await Test.createTestingModule({
         imports: [
-          SqsModule.registerAsync({
+          SqsModule.forRootAsync(SqsModule, {
             useFactory: () => {
               return {
                 consumers: [TestQueues[TestQueue.Test]],
@@ -101,7 +94,7 @@ describe("SqsModule", () => {
     beforeAll(async () => {
       module = await Test.createTestingModule({
         imports: [
-          SqsModule.register({
+          SqsModule.forRoot(SqsModule, {
             consumers: [
               {
                 ...TestQueues[TestQueue.Test],
