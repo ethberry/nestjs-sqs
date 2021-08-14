@@ -67,10 +67,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "format": "npx prettier --write **/*.{ts,json}",
+    "format": "prettier --write **/*.{ts,json}",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
-    "test": "npx jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
+    "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "dist/index.d.ts",
   "version": "1.0.0"
