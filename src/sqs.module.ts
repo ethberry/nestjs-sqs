@@ -1,5 +1,5 @@
 import { DynamicModule, Module } from "@nestjs/common";
-import { DiscoveryModule } from "@nestjs-plus/discovery";
+import { DiscoveryModule } from "@golevelup/nestjs-discovery";
 
 import { createConfigurableDynamicRootModule } from "@golevelup/nestjs-modules";
 

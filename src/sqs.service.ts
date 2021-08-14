@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
-import { DiscoveryService } from "@nestjs-plus/discovery";
+import { DiscoveryService } from "@golevelup/nestjs-discovery";
 import { SQS } from "aws-sdk";
 import type { QueueAttributeName } from "aws-sdk/clients/sqs";
 
