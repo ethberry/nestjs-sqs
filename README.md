@@ -25,7 +25,7 @@ Just register this module:
 ```ts
 @Module({
   imports: [
-    SqsModule.forRoot({
+    SqsModule.forRoot(SqsModule, {
       consumers: [],
       producers: [],
     }),
@@ -35,12 +35,12 @@ class AppModule {}
 ```
 
 Quite often you might want to asynchronously pass module options instead of passing them beforehand.
-In such case, use `registerAsync()` method like many other Nest.js libraries.
+In such case, use `forRootAsync()` method like many other Nest.js libraries.
 
 - Use factory
 
 ```ts
-SqsModule.forRootAsync({
+SqsModule.forRootAsync(SqsModule, {
   useFactory: () => {
     return {
       consumers: [],
@@ -53,7 +53,7 @@ SqsModule.forRootAsync({
 - Use class
 
 ```ts
-SqsModule.forRootAsync({
+SqsModule.forRootAsync(SqsModule, {
   useClass: SqsConfigService,
 });
 ```
@@ -61,7 +61,7 @@ SqsModule.forRootAsync({
 - Use existing
 
 ```ts
-SqsModule.forRootAsync({
+SqsModule.forRootAsync(SqsModule, {
   imports: [ConfigModule],
   useExisting: ConfigService,
 });

@@ -35,11 +35,29 @@ const TestQueues: { [key in TestQueue]: SqsConsumerOptions | SqsProducerOptions 
 describe("SqsModule", () => {
   let module: TestingModule;
 
-  describe.skip("register", () => {});
+  describe("forRoot", () => {
+    afterAll(async () => {
+      await module?.close();
+    });
 
-  describe("registerAsync", () => {
-    let module: TestingModule;
+    it("should register module", async () => {
+      module = await Test.createTestingModule({
+        imports: [
+          SqsModule.forRoot(SqsModule, {
+            consumers: [TestQueues[TestQueue.Test]],
+            producers: [TestQueues[TestQueue.Test]],
+          }),
+        ],
+      }).compile();
 
+      const sqsService = module.get(SqsService);
+      expect(sqsService).toBeTruthy();
+      expect(sqsService.options.consumers).toHaveLength(1);
+      expect(sqsService.options.producers).toHaveLength(1);
+    });
+  });
+
+  describe("forRootAsync", () => {
     afterAll(async () => {
       await module?.close();
     });
@@ -75,7 +93,6 @@ describe("SqsModule", () => {
       public constructor(public readonly sqsService: SqsService) {}
 
       @SqsMessageHandler(TestQueue.Test)
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       public handleTestMessage(message: SQS.Message) {
         fakeProcessor(message);
       }
