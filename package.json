@@ -23,7 +23,7 @@
   },
   "description": "",
   "devDependencies": {
-    "@gemunion/eslint-config": "0.1.8",
+    "@gemunion/eslint-config": "0.1.9",
     "@nestjs/common": "8.0.6",
     "@nestjs/core": "8.0.6",
     "@nestjs/testing": "8.0.6",
