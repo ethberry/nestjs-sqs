@@ -31,4 +31,4 @@ jobs:
       - name: npm test
         env:
           SQS_ENDPOINT: http://localhost:9324
-        run: npm run test:e2e
+        run: npm run test
