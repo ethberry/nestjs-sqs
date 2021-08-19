@@ -17,7 +17,7 @@
   "dependencies": {
     "@golevelup/nestjs-discovery": "2.3.1",
     "@golevelup/nestjs-modules": "0.4.2",
-    "aws-sdk": "2.971.0",
+    "aws-sdk": "2.972.0",
     "sqs-consumer": "5.5.0",
     "sqs-producer": "2.1.0"
   },
@@ -49,7 +49,7 @@
     "rxjs": "7.3.0",
     "ts-jest": "26.5.6",
     "ts-node": "10.2.1",
-    "tsc-watch": "4.4.0",
+    "tsc-watch": "4.5.0",
     "typescript": "4.3.5",
     "wait-for-expect": "3.0.2"
   },
