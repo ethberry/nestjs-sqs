@@ -17,12 +17,19 @@
   "dependencies": {
     "@golevelup/nestjs-discovery": "2.3.1",
     "@golevelup/nestjs-modules": "0.4.2",
-    "aws-sdk": "2.979.0",
+    "@nestjs/common": "8.0.6",
+    "@nestjs/config": "1.0.1",
+    "@nestjs/core": "8.0.6",
+    "@nestjs/microservices": "8.0.6",
+    "@nestjs/platform-express": "8.0.6",
+    "aws-sdk": "2.980.0",
+    "rxjs": "7.3.0",
     "sqs-consumer": "5.6.0",
     "sqs-producer": "2.1.0"
   },
   "description": "",
   "devDependencies": {
+    "@trejgun/cross-env": "0.0.3",
     "@gemunion/eslint-config": "0.1.9",
     "@nestjs/common": "8.0.6",
     "@nestjs/core": "8.0.6",
@@ -46,7 +53,6 @@
     "prettier": "2.3.2",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
-    "rxjs": "7.3.0",
     "ts-jest": "26.5.6",
     "ts-node": "10.2.1",
     "tsc-watch": "4.5.0",
@@ -74,6 +80,7 @@
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
     "prepare": "npm run build",
+    "start": "cross-env NODE_ENV=${NODE_ENV:=development} tsc-watch --onSuccess \"node .\" --onFailure \"echo Compilation Failed\"",
     "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "./dist/index.d.ts",
