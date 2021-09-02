@@ -1,6 +1,5 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CustomTransportStrategy, MessageHandler, Server } from "@nestjs/microservices";
-import { SQS } from "aws-sdk";
 import { Consumer, SQSMessage } from "sqs-consumer";
 import { EMPTY, Observable } from "rxjs";
 import { ISqsClientOptions, ISqsServerOptions } from "../interfaces";
@@ -9,9 +8,6 @@ import { SqsDeserializer } from "./sqs.deserializer";
 
 @Injectable()
 export class SqsServer extends Server implements CustomTransportStrategy {
-  protected readonly logger = new Logger(SqsServer.name);
-
-  private sqs: SQS;
   private consumer: Consumer;
 
   constructor(protected readonly options: ISqsServerOptions["options"]) {
@@ -25,18 +21,11 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     this.consumer = Consumer.create({
       ...this.options,
       handleMessage: this.handleMessage.bind(this),
-      handleMessageBatch: this.handleMessageBatch.bind(this),
     });
   }
 
   public async handleMessage(message: SQSMessage): Promise<void> {
     await this.call("name", message);
-  }
-
-  public async handleMessageBatch(messages: Array<SQSMessage>): Promise<void> {
-    for (const message of messages) {
-      await this.handleMessage(message);
-    }
   }
 
   public listen(callback: () => void): void {

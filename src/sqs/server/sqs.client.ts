@@ -1,16 +1,13 @@
-import { Logger } from "@nestjs/common";
 import { ClientProxy, PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
-import { ISqsClientOptions } from "../interfaces";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
 import { Consumer, SQSMessage } from "sqs-consumer";
-import { SQS } from "aws-sdk";
-import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
+
+import { ISqsClientOptions } from "../interfaces";
 import { SqsDeserializer } from "./sqs.deserializer";
 import { SqsSerializer } from "./sqs.serializer";
 
 export class SqsClient extends ClientProxy {
-  private readonly logger = new Logger(SqsClient.name);
-  private sqs: SQS;
   private producer: Producer;
   private consumer: Consumer;
 
@@ -24,10 +21,6 @@ export class SqsClient extends ClientProxy {
   public createClient(): void {
     this.consumer = Consumer.create({
       ...this.options,
-      waitTimeSeconds: 1,
-      batchSize: 1,
-      terminateVisibilityTimeout: true,
-      messageAttributeNames: ["All"],
       handleMessage: this.handleMessage.bind(this),
     });
 
