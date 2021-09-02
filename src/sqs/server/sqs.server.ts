@@ -24,7 +24,6 @@ export class SqsServer extends Server implements CustomTransportStrategy {
   public createClient(): void {
     this.consumer = Consumer.create({
       ...this.options,
-      sqs: this.sqs,
       handleMessage: this.handleMessage.bind(this),
       handleMessageBatch: this.handleMessageBatch.bind(this),
     });

@@ -1,17 +1,15 @@
 import { Serializer } from "@nestjs/microservices";
+import { v4 } from "uuid";
 
 export class SqsSerializer implements Serializer {
   serialize(value: any): any {
-    const message = value.data;
-    let body = message.body;
-
-    if (typeof body !== "string") {
-      body = JSON.stringify(body);
-    }
-
+    const id = v4();
     return {
-      ...message,
-      body,
+      id,
+      body: JSON.stringify(value),
+      delaySeconds: 0,
+      groupId: "test",
+      deduplicationId: id,
     };
   }
 }

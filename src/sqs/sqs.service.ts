@@ -3,7 +3,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 
 import { ProviderType } from "../common/providers";
-import { IMessage } from "./interfaces";
 
 @Injectable()
 export class SqsService {
@@ -21,29 +20,13 @@ export class SqsService {
   }
 
   public emit(): Promise<any> {
-    const id = Math.floor(Math.random() * 1000000).toString();
-
-    const res = this.ethClientProxy.emit<string, IMessage>("KEY", {
-      id,
-      body: { test: true },
-      delaySeconds: 0,
-      groupId: "test",
-      deduplicationId: id,
-    });
+    const res = this.ethClientProxy.emit<string, any>("KEY", { test: true });
 
     return firstValueFrom(res);
   }
 
   public send(): Promise<any> {
-    const id = Math.floor(Math.random() * 1000000).toString();
-
-    const res = this.ethClientProxy.send<string, IMessage>("KEY", {
-      id,
-      body: { test: true },
-      delaySeconds: 0,
-      groupId: "test",
-      deduplicationId: id,
-    });
+    const res = this.ethClientProxy.send<string, any>("KEY", { test: true });
 
     return firstValueFrom(res);
   }
