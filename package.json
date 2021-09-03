@@ -1,38 +1,26 @@
 {
   "author": {
-    "email": "ssut@ssut.me",
-    "name": "Suhun Han",
-    "url": "https://github.com/ssut"
+    "email": "TrejGun+OpenSourse@gmail.com",
+    "name": "TrejGun",
+    "url": "https://trejgun.github.io/"
   },
   "bugs": {
     "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
-  "contributors": [
-    {
-      "email": "TrejGun@gmail.com",
-      "name": "TrejGun",
-      "url": "https://trejgun.github.io/"
-    }
-  ],
   "dependencies": {
     "@nestjs/common": "8.0.6",
-    "@nestjs/config": "1.0.1",
-    "@nestjs/core": "8.0.6",
     "@nestjs/microservices": "8.0.6",
-    "@nestjs/platform-express": "8.0.6",
     "aws-sdk": "2.980.0",
     "rxjs": "7.3.0",
-    "uuid": "8.3.2",
     "sqs-consumer": "5.6.0",
-    "sqs-producer": "2.1.0"
+    "sqs-producer": "2.1.0",
+    "uuid": "8.3.2"
   },
   "description": "",
   "devDependencies": {
-    "@trejgun/cross-env": "0.0.3",
     "@gemunion/eslint-config": "0.1.9",
-    "@nestjs/common": "8.0.6",
-    "@nestjs/core": "8.0.6",
     "@nestjs/testing": "8.0.6",
+    "@trejgun/cross-env": "0.0.3",
     "@types/jest": "26.0.24",
     "@types/uuid": "8.3.1",
     "@typescript-eslint/eslint-plugin": "4.30.0",
@@ -75,11 +63,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "format": "prettier **/*.ts --write",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
     "prepare": "npm run build",
-    "start": "cross-env NODE_ENV=${NODE_ENV:=development} tsc-watch --onSuccess \"node .\" --onFailure \"echo Compilation Failed\"",
     "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "types": "./dist/index.d.ts",

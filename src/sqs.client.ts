@@ -1,15 +1,18 @@
+import { Logger } from "@nestjs/common";
 import { ClientProxy, PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
 import { Consumer, SQSMessage } from "sqs-consumer";
 
-import { ISqsClientOptions } from "../interfaces";
+import { ISqsClientOptions } from "./interfaces";
 import { SqsDeserializer } from "./sqs.deserializer";
 import { SqsSerializer } from "./sqs.serializer";
 
 export class SqsClient extends ClientProxy {
   private producer: Producer;
   private consumer: Consumer;
+
+  private readonly logger = new Logger("SqsService");
 
   constructor(protected readonly options: ISqsClientOptions["options"]) {
     super();
@@ -28,15 +31,15 @@ export class SqsClient extends ClientProxy {
     });
 
     this.consumer.on("error", err => {
-      console.error(err.message);
+      this.logger.error(err.message);
     });
 
     this.consumer.on("processing_error", err => {
-      console.error(err.message);
+      this.logger.error(err.message);
     });
 
     this.consumer.on("timeout_error", err => {
-      console.error(err.message);
+      this.logger.error(err.message);
     });
 
     this.consumer.start();
@@ -48,16 +51,13 @@ export class SqsClient extends ClientProxy {
   }
 
   protected publish(partialPacket: ReadPacket, callback: (packet: WritePacket) => any): () => void {
-    if (!this.options.producerUrl) {
-      throw new Error("You have to provide `producerUrl` to use `send`");
-    }
     const packet = this.assignPacketId(partialPacket);
     const serializedPacket = this.serializer.serialize(packet);
 
     void this.producer.send(serializedPacket).then(() => {
       this.routingMap.set(packet.id, callback);
     });
-    return () => this.routingMap.delete(serializedPacket.MessageId);
+    return () => this.routingMap.delete(packet.id);
   }
 
   protected dispatchEvent(packet: ReadPacket): Promise<any> {

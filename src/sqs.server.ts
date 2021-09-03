@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { CustomTransportStrategy, IncomingRequest, Server } from "@nestjs/microservices";
+import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
 import { Consumer, SQSMessage } from "sqs-consumer";
+import { Producer } from "sqs-producer";
 
-import { ISqsServerOptions } from "../interfaces";
+import { ISqsServerOptions } from "./interfaces";
 import { SqsSerializer } from "./sqs.serializer";
 import { SqsDeserializer } from "./sqs.deserializer";
-import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
-import { Producer } from "sqs-producer";
 
 @Injectable()
 export class SqsServer extends Server implements CustomTransportStrategy {
@@ -62,7 +62,6 @@ export class SqsServer extends Server implements CustomTransportStrategy {
         id,
         ...paket,
       });
-
       void this.producer.send(serializedPacket);
     });
   }
