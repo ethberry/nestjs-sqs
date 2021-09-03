@@ -18,52 +18,21 @@ $ npm i --save @gemunion/nestjs-sqs
 
 ## Quick Start
 
-### Register module
+### Register custom service
 
-Just register this module:
+Just like you register any other microservice
 
 ```ts
-@Module({
-  imports: [
-    SqsModule.forRoot(SqsModule, {
-      consumers: [],
-      producers: [],
+app.connectMicroservice({
+  strategy: new SqsServer({
+    consumerUrl: "http://localhost:9324/queue/producer.fifo",
+    producerUrl: "http://localhost:9324/queue/consumer.fifo",
+    sqs: new SQS({
+      apiVersion: "2012-11-05",
+      credentials: new Credentials("x", "x"),
+      region: "none",
     }),
-  ],
-})
-class AppModule {}
-```
-
-Quite often you might want to asynchronously pass module options instead of passing them beforehand.
-In such case, use `forRootAsync()` method like many other Nest.js libraries.
-
-- Use factory
-
-```ts
-SqsModule.forRootAsync(SqsModule, {
-  useFactory: () => {
-    return {
-      consumers: [],
-      producers: [],
-    };
-  },
-});
-```
-
-- Use class
-
-```ts
-SqsModule.forRootAsync(SqsModule, {
-  useClass: SqsConfigService,
-});
-```
-
-- Use existing
-
-```ts
-SqsModule.forRootAsync(SqsModule, {
-  imports: [ConfigModule],
-  useExisting: ConfigService,
+  }),
 });
 ```
 
@@ -72,15 +41,16 @@ SqsModule.forRootAsync(SqsModule, {
 You need to decorate methods in your NestJS providers in order to have them be automatically attached as event handlers for incoming SQS messages:
 
 ```ts
-@Injectable()
-export class AppMessageHandler {
-  @SqsMessageHandler(/** name: */ 'queueName', /** batch: */ false)
-  public async handleMessage(message: SQS.Message) {
+@Controller()
+export class SqsController {
+  @MessagePattern("MESSAGE_TYPE")
+  public handleMessage(message: any): Promise<any> {
+    // do something, return result
   }
 
-  @SqsConsumerEventHandler(/** name: */ 'queueName', /** eventName: */ 'processing_error')
-  public onProcessingError(error: Error, message: SQS.Message) {
-    // report errors here
+  @EventPattern("EVENT_TYPE")
+  public handleEvent(error: Error, message: SQS.Message): Promise<void> {
+    // do something
   }
 }
 ```
@@ -89,28 +59,25 @@ export class AppMessageHandler {
 
 ```ts
 export class AppService {
-  public constructor(
-    private readonly sqsService: SqsService,
-  ) { }
+  @Client({
+    customClass: SqsClient,
+    options: {
+      consumerUrl: "http://localhost:9324/queue/consumer.fifo",
+      producerUrl: "http://localhost:9324/queue/producer.fifo",
+      sqs: new SQS({
+        apiVersion: "2012-11-05",
+        credentials: new Credentials("x", "x"),
+        region: "none",
+      }),
+    },
+  })
+  client: ClientProxy;
 
-  public async dispatchSomething() {
-    await this.sqsService.send(/** name: */ 'queueName', {
-      id: 'id',
-      body: { ... },
-      groupId: 'groupId',
-      deduplicationId: 'deduplicationId',
-      messageAttributes: { ... },
-      delaySeconds: 0,
-    });
+  public dispatch(): Promise<void> {
+    void this.client.emit("MESSAGE_TYPE", {});
   }
 }
 ```
-
-### Configuration
-
-See [here](https://github.com/gemunion/nestjs-sqs/blob/master/lib/sqs.types.ts), and note that we have same configuration as
-[bbc/sqs-producer's](https://github.com/bbc/sqs-producer) and [bbc/sqs-consumer's](https://github.com/bbc/sqs-consumer).
-In most time you just need to specify both `name` and `queueUrl` at the minimum requirements.
 
 ### Code quality
 
