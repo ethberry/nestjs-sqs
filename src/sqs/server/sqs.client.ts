@@ -19,8 +19,11 @@ export class SqsClient extends ClientProxy {
   }
 
   public createClient(): void {
+    const { producerUrl, consumerUrl, ...options } = this.options;
+
     this.consumer = Consumer.create({
-      ...this.options,
+      ...options,
+      queueUrl: consumerUrl,
       handleMessage: this.handleMessage.bind(this),
     });
 
@@ -38,12 +41,19 @@ export class SqsClient extends ClientProxy {
 
     this.consumer.start();
 
-    this.producer = Producer.create(this.options);
+    this.producer = Producer.create({
+      ...options,
+      queueUrl: producerUrl,
+    });
   }
 
   protected publish(partialPacket: ReadPacket, callback: (packet: WritePacket) => any): () => void {
+    if (!this.options.producerUrl) {
+      throw new Error("You have to provide `producerUrl` to use `send`");
+    }
     const packet = this.assignPacketId(partialPacket);
     const serializedPacket = this.serializer.serialize(packet);
+
     void this.producer.send(serializedPacket).then(() => {
       this.routingMap.set(packet.id, callback);
     });
@@ -61,14 +71,18 @@ export class SqsClient extends ClientProxy {
   }
 
   public async handleMessage(message: SQSMessage): Promise<void> {
-    const { id, response } = await this.deserializer.deserialize(message);
+    const { id, response, err, status, isDisposed } = await this.deserializer.deserialize(message);
     const callback = this.routingMap.get(id);
+
     if (!callback) {
       return undefined;
     }
     // eslint-disable-next-line node/no-callback-literal
     callback({
       response,
+      err,
+      status,
+      isDisposed,
     });
   }
 

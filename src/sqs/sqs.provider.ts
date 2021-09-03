@@ -10,7 +10,8 @@ export const sqsServiceProvider = {
     return ClientProxyFactory.create({
       customClass: SqsClient,
       options: {
-        queueUrl: "http://localhost:9324/queue/test.fifo",
+        consumerUrl: "http://localhost:9324/queue/consumer.fifo",
+        producerUrl: "http://localhost:9324/queue/producer.fifo",
         sqs: new SQS({
           apiVersion: "2012-11-05",
           credentials: new Credentials("x", "x"),

@@ -1,4 +1,4 @@
-import { Observable, firstValueFrom } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 
@@ -8,25 +8,21 @@ import { ProviderType } from "../common/providers";
 export class SqsService {
   constructor(
     @Inject(ProviderType.SQS_SERVICE)
-    private readonly ethClientProxy: ClientProxy,
+    private readonly sqsClientProxy: ClientProxy,
   ) {}
 
-  public block(block: any): Observable<any> {
-    return this.ethClientProxy.emit("BLOCK", block);
-  }
-
-  public transaction(transaction: any): Observable<any> {
-    return this.ethClientProxy.emit("TRANSACTION", transaction);
+  public receive<T = any>(data: T): Promise<T> {
+    return Promise.resolve(data);
   }
 
   public emit(): Promise<any> {
-    const res = this.ethClientProxy.emit<string, any>("KEY", { test: true });
+    const res = this.sqsClientProxy.emit<string, any>("TEST", { test: true });
 
     return firstValueFrom(res);
   }
 
   public send(): Promise<any> {
-    const res = this.ethClientProxy.send<string, any>("KEY", { test: true });
+    const res = this.sqsClientProxy.send<string, any>("TEST", { test: true });
 
     return firstValueFrom(res);
   }

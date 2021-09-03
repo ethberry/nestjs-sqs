@@ -13,7 +13,8 @@ async function bootstrap() {
 
   app.connectMicroservice({
     strategy: new SqsServer({
-      queueUrl: "http://localhost:9324/queue/test-dead.fifo",
+      consumerUrl: "http://localhost:9324/queue/producer.fifo",
+      producerUrl: "http://localhost:9324/queue/consumer.fifo",
       sqs: new SQS({
         apiVersion: "2012-11-05",
         credentials: new Credentials("x", "x"),

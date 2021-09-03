@@ -1,4 +1,3 @@
-import { Observable } from "rxjs";
 import { Controller, Get } from "@nestjs/common";
 import { MessagePattern } from "@nestjs/microservices";
 
@@ -8,14 +7,9 @@ import { SqsService } from "./sqs.service";
 export class SqsController {
   constructor(private readonly sqsService: SqsService) {}
 
-  @MessagePattern("BLOCK")
-  public block(data: any): Observable<any> {
-    return this.sqsService.block(data);
-  }
-
-  @MessagePattern("TRANSACTION")
-  public transaction(data: any): Observable<any> {
-    return this.sqsService.transaction(data);
+  @MessagePattern("TEST")
+  public receive<T = any>(data: T): Promise<T> {
+    return this.sqsService.receive(data);
   }
 
   @Get("/emit")

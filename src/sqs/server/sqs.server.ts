@@ -1,14 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { CustomTransportStrategy, MessageHandler, Server } from "@nestjs/microservices";
+import { CustomTransportStrategy, IncomingRequest, Server } from "@nestjs/microservices";
 import { Consumer, SQSMessage } from "sqs-consumer";
-import { EMPTY, Observable } from "rxjs";
-import { ISqsClientOptions, ISqsServerOptions } from "../interfaces";
+
+import { ISqsServerOptions } from "../interfaces";
 import { SqsSerializer } from "./sqs.serializer";
 import { SqsDeserializer } from "./sqs.deserializer";
+import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
+import { Producer } from "sqs-producer";
 
 @Injectable()
 export class SqsServer extends Server implements CustomTransportStrategy {
   private consumer: Consumer;
+  private producer: Producer;
 
   constructor(protected readonly options: ISqsServerOptions["options"]) {
     super();
@@ -18,14 +21,18 @@ export class SqsServer extends Server implements CustomTransportStrategy {
   }
 
   public createClient(): void {
+    const { consumerUrl, producerUrl, ...options } = this.options;
+
     this.consumer = Consumer.create({
-      ...this.options,
+      ...options,
+      queueUrl: consumerUrl,
       handleMessage: this.handleMessage.bind(this),
     });
-  }
 
-  public async handleMessage(message: SQSMessage): Promise<void> {
-    await this.call("name", message);
+    this.producer = Producer.create({
+      ...options,
+      queueUrl: producerUrl,
+    });
   }
 
   public listen(callback: () => void): void {
@@ -34,25 +41,41 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     callback();
   }
 
-  private call(pattern: string, data: any): Promise<Observable<any>> {
-    const handler: MessageHandler | undefined = this.messageHandlers.get(pattern);
+  public async handleMessage(message: SQSMessage): Promise<void> {
+    const { pattern, data, id } = (await this.deserializer.deserialize(message)) as IncomingRequest;
+
+    const handler = this.getHandlerByPattern(pattern);
 
     if (!handler) {
-      return Promise.resolve(EMPTY);
+      const serializedPacket = this.serializer.serialize({
+        id: data.id,
+        status: "error",
+        err: NO_MESSAGE_HANDLER,
+      });
+      await this.producer.send(serializedPacket);
+      return;
     }
 
-    return handler(data);
+    const response$ = this.transformToObservable(await handler(data));
+    this.send(response$, paket => {
+      const serializedPacket = this.serializer.serialize({
+        id,
+        ...paket,
+      });
+
+      void this.producer.send(serializedPacket);
+    });
   }
 
   public close(): void {
     this.consumer.stop();
   }
 
-  protected initializeSerializer(options: ISqsClientOptions["options"]): void {
+  protected initializeSerializer(options: ISqsServerOptions["options"]): void {
     this.serializer = options?.serializer ?? new SqsSerializer();
   }
 
-  protected initializeDeserializer(options: ISqsClientOptions["options"]): void {
+  protected initializeDeserializer(options: ISqsServerOptions["options"]): void {
     this.deserializer = options?.deserializer ?? new SqsDeserializer();
   }
 }
