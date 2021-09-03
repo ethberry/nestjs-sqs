@@ -1,4 +1,4 @@
-import { Controller, INestApplication, Inject, Module } from "@nestjs/common";
+import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClientProxy, ClientsModule, MessagePattern } from "@nestjs/microservices";
 import { Credentials, SQS } from "aws-sdk";
@@ -19,14 +19,13 @@ const producerUrl = "http://localhost:9324/queue/consumer.fifo";
 const SQS_SERVICE = "SQS_SERVICE";
 const EVENT_NAME = "EVENT_NAME";
 
-@Controller()
-class SqsController {
+@Injectable()
+class SqsService {
   constructor(
     @Inject(SQS_SERVICE)
     private readonly sqsClientProxy: ClientProxy,
   ) {}
 
-  @MessagePattern(EVENT_NAME)
   public receive<T = any>(data: T): Promise<T> {
     return Promise.resolve(data);
   }
@@ -39,6 +38,16 @@ class SqsController {
   public send(data: any): Promise<any> {
     const res = this.sqsClientProxy.send<string, any>(EVENT_NAME, data);
     return firstValueFrom(res);
+  }
+}
+
+@Controller()
+class SqsController {
+  constructor(private readonly sqsService: SqsService) {}
+
+  @MessagePattern(EVENT_NAME)
+  public receive<T = any>(data: T): Promise<T> {
+    return this.sqsService.receive(data);
   }
 }
 
@@ -57,12 +66,13 @@ class SqsController {
     ]),
   ],
   controllers: [SqsController],
+  providers: [SqsService],
 })
 class SqsModule {}
 
 describe("SqsServer", () => {
   let app: INestApplication;
-  let sqsController: SqsController;
+  let sqsService: SqsService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -78,7 +88,7 @@ describe("SqsServer", () => {
     });
     await app.startAllMicroservices();
 
-    sqsController = module.get<SqsController>(SqsController);
+    sqsService = module.get<SqsService>(SqsService);
   });
 
   afterAll(async () => {
@@ -93,7 +103,7 @@ describe("SqsServer", () => {
     let logSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      logSpy = jest.spyOn(sqsController, "send");
+      logSpy = jest.spyOn(sqsService, "receive");
     });
 
     afterEach(() => {
@@ -102,7 +112,7 @@ describe("SqsServer", () => {
 
     it("should send/receive event", async () => {
       const data = { test: true };
-      const result = await sqsController.send(data);
+      const result = await sqsService.send(data);
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 
