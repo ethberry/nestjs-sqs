@@ -10,7 +10,7 @@
   "dependencies": {
     "@nestjs/common": "8.0.6",
     "@nestjs/microservices": "8.0.6",
-    "aws-sdk": "2.980.0",
+    "aws-sdk": "2.983.0",
     "rxjs": "7.3.0",
     "sqs-consumer": "5.6.0",
     "sqs-producer": "2.1.0",
