@@ -3,6 +3,7 @@ import { CustomTransportStrategy, IncomingRequest, Server } from "@nestjs/micros
 import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
 import { Consumer, SQSMessage } from "sqs-consumer";
 import { Producer } from "sqs-producer";
+import { from } from "rxjs";
 
 import { ISqsServerOptions } from "./interfaces";
 import { SqsSerializer } from "./sqs.serializer";
@@ -29,6 +30,20 @@ export class SqsServer extends Server implements CustomTransportStrategy {
       handleMessage: this.handleMessage.bind(this),
     });
 
+    this.consumer.on("error", err => {
+      this.logger.error(err.message);
+    });
+
+    this.consumer.on("processing_error", err => {
+      this.logger.error(err.message);
+    });
+
+    this.consumer.on("timeout_error", err => {
+      this.logger.error(err.message);
+    });
+
+    this.consumer.start();
+
     this.producer = Producer.create({
       ...options,
       queueUrl: producerUrl,
@@ -37,7 +52,6 @@ export class SqsServer extends Server implements CustomTransportStrategy {
 
   public listen(callback: () => void): void {
     this.createClient();
-    this.consumer.start();
     callback();
   }
 
@@ -62,7 +76,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
         id,
         ...paket,
       });
-      void this.producer.send(serializedPacket);
+      return from(this.producer.send(serializedPacket));
     });
   }
 

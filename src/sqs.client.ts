@@ -67,7 +67,7 @@ export class SqsClient extends ClientProxy {
 
   public connect(): Promise<any> {
     this.createClient();
-    return Promise.resolve(this.producer);
+    return Promise.resolve();
   }
 
   public async handleMessage(message: SQSMessage): Promise<void> {

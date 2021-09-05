@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { ClientProxy, ClientsModule, MessagePattern } from "@nestjs/microservices";
 import { Credentials, SQS } from "aws-sdk";
 import { firstValueFrom } from "rxjs";
+import { v4 } from "uuid";
 
 import { SqsServer } from "./sqs.server";
 import { SqsClient } from "./sqs.client";
@@ -30,8 +31,8 @@ class SqsService {
     return Promise.resolve(data);
   }
 
-  public emit(data: any): Promise<any> {
-    const res = this.sqsClientProxy.emit<string, any>(EVENT_NAME, data);
+  public emit(data: any): Promise<void> {
+    const res = this.sqsClientProxy.emit<void, any>(EVENT_NAME, data);
     return firstValueFrom(res);
   }
 
@@ -110,14 +111,42 @@ describe("SqsServer", () => {
       logSpy.mockClear();
     });
 
-    it("should send/receive event", async () => {
+    it("should emit event", async () => {
       const data = { test: true };
-      const result = await sqsService.send(data);
+      const result = await sqsService.emit(data);
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      expect(result).toEqual(data);
+      expect(result).toHaveLength(1);
       expect(logSpy).toBeCalledTimes(1);
     });
+
+    it("should receive event", async () => {
+      const data = { test: true };
+      const result = await sqs
+        .sendMessage({
+          QueueUrl: consumerUrl,
+          MessageBody: JSON.stringify({ pattern: EVENT_NAME, data }),
+          MessageGroupId: "test",
+          MessageDeduplicationId: v4(),
+        })
+        .promise();
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      expect(result).toBeDefined();
+      expect(logSpy).toBeCalledTimes(1);
+    });
+
+    // it("should send/receive event", async () => {
+    //   jest.setTimeout(5000);
+    //   const data = { test: true };
+    //   const result = await sqsService.send(data);
+    //
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+    //
+    //   expect(result).toEqual(data);
+    //   expect(logSpy).toBeCalledTimes(1);
+    // });
   });
 });
