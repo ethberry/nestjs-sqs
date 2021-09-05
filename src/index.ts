@@ -1,4 +1,3 @@
 export * from "./interfaces";
-export * from "./sqs.module";
-export * from "./sqs.service";
-export * from "./sqs.decorators";
+export * from "./sqs.client";
+export * from "./sqs.server";
