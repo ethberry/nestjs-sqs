@@ -20,8 +20,8 @@ jobs:
       - name: Install Packages npm i
         run: npm i
 
-      - name: Bootstrap Packages
-        run: npm run bootstrap
+      - name: Build Packages
+        run: npm run build
 
       - name: Authenticate Registry & Configure Git User
         run: |
