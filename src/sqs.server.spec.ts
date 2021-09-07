@@ -139,7 +139,6 @@ describe("SqsServer", () => {
     });
 
     it("should send/receive event", async () => {
-      jest.setTimeout(5000);
       const data = { test: true };
       const result = await sqsService.send(data);
 
