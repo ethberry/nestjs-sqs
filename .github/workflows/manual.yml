@@ -1,0 +1,56 @@
+
+name: Manual release Publish
+on:
+  workflow_dispatch:
+
+jobs:
+  user-publish:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      # BEGIN INSTALL
+      - uses: actions/checkout@v2
+        with:
+          # pulls all commits (needed for lerna to correctly version)
+          # see https://stackoverflow.com/a/60184319/9285308 & https://github.com/actions/checkout
+          fetch-depth: "0"
+      # pulls all tags (needed for lerna to correctly version)
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/* # see https://stackoverflow.com/a/60184319/9285308
+
+      - name: Install Packages npm i
+        run: npm i
+
+      - name: Bootstrap Packages
+        run: npm run bootstrap
+
+      - name: Authenticate Registry & Configure Git User
+        run: |
+          echo "save-exact=true" > .npmrc
+          echo "package-lock=false" >> .npmrc
+          echo "@gemunion:registry=https://npm.pkg.github.com/" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN" >> .npmrc
+          git update-index --assume-unchanged .npmrc
+          npx npm-cli-login -u $GITHUBUSER -p $GITHUBTOKEN -e $GITHUBEMAIL -r https://npm.pkg.github.com -s @gemunion --config-path="./"
+          git config --global user.name '@gemunion'
+          git config --global user.email $GITHUBEMAIL
+        env:
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+          GITHUBUSER: ${{ secrets.GITHUBUSER }}
+          GITHUBEMAIL: ${{ secrets.GITHUBEMAIL }}
+
+      - name: Authenticate check via npm
+        run: npm whoami --registry=https://npm.pkg.github.com/
+
+      - name: Version by NPM
+        run: npm version patch -m "[Manual release] [skip ci] %s"
+
+      - name: Publish by NPM
+        run: npm publish
+        env:
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+
+      - name: Git push
+        run: git push --no-verify && git push --tags --no-verify
+        env:
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+
