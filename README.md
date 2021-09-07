@@ -18,7 +18,7 @@ $ npm i --save @gemunion/nestjs-sqs
 
 ## Quick Start
 
-### Register custom service
+### Register custom transport
 
 Just like you register any other microservice
 
@@ -43,12 +43,12 @@ You need to decorate methods in your NestJS providers in order to have them be a
 ```ts
 @Controller()
 export class SqsController {
-  @MessagePattern("MESSAGE_TYPE")
+  @MessagePattern(MESSAGE_TYPE)
   public handleMessage(message: any): Promise<any> {
     // do something, return result
   }
 
-  @EventPattern("EVENT_TYPE")
+  @EventPattern(EVENT_TYPE)
   public handleEvent(error: Error, message: SQS.Message): Promise<void> {
     // do something
   }
