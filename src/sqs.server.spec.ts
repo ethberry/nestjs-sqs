@@ -138,15 +138,15 @@ describe("SqsServer", () => {
       expect(logSpy).toBeCalledTimes(1);
     });
 
-    // it("should send/receive event", async () => {
-    //   jest.setTimeout(5000);
-    //   const data = { test: true };
-    //   const result = await sqsService.send(data);
-    //
-    //   await new Promise(resolve => setTimeout(resolve, 1000));
-    //
-    //   expect(result).toEqual(data);
-    //   expect(logSpy).toBeCalledTimes(1);
-    // });
+    it("should send/receive event", async () => {
+      jest.setTimeout(5000);
+      const data = { test: true };
+      const result = await sqsService.send(data);
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      expect(result).toEqual(data);
+      expect(logSpy).toBeCalledTimes(1);
+    });
   });
 });
