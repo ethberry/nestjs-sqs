@@ -1,8 +1,5 @@
 # nestjs-sqs
 
-[![Test](https://github.com/gemunion/nestjs-sqs/workflows/Test/badge.svg)](https://github.com/gemunion/nestjs-sqs/actions?query=workflow%3ATest)
-[![npm version](https://badge.fury.io/js/%40gemunion%2Fnestjs-sqs.svg)](https://badge.fury.io/js/%40gemunion%2Fnestjs-sqs)
-
 Tested with: [AWS SQS](https://aws.amazon.com/en/sqs/) and [ElasticMQ](https://github.com/softwaremill/elasticmq).
 
 Nestjs-sqs is a project to make SQS easier to use and control some required flows with NestJS.
