@@ -58,23 +58,31 @@ export class SqsController {
 ### Produce messages
 
 ```ts
+@Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: SQS_SERVICE,
+        customClass: SqsClient,
+        options: {
+          consumerUrl: producerUrl,
+          producerUrl: consumerUrl,
+          sqs,
+        },
+      },
+    ]),
+  ],
+})
+class AppModule {}
+
 export class AppService {
-  @Client({
-    customClass: SqsClient,
-    options: {
-      consumerUrl: "http://localhost:9324/queue/consumer.fifo",
-      producerUrl: "http://localhost:9324/queue/producer.fifo",
-      sqs: new SQS({
-        apiVersion: "2012-11-05",
-        credentials: new Credentials("x", "x"),
-        region: "none",
-      }),
-    },
-  })
-  client: ClientProxy;
+  constructor(
+    @Inject(SQS_SERVICE)
+    private readonly sqsClientProxy: ClientProxy,
+  ) {}
 
   public dispatch(): Promise<void> {
-    void this.client.emit("MESSAGE_TYPE", {});
+    void this.client.emit(EVENT_NAME, {});
   }
 }
 ```
