@@ -87,7 +87,9 @@ export class SqsClient extends ClientProxy {
   }
 
   public close(): void {
-    this.consumer.stop();
+    if (this.consumer) {
+      this.consumer.stop();
+    }
   }
 
   protected assignPacketId(packet: ReadPacket): ReadPacket & PacketId {

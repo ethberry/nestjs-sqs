@@ -19,6 +19,7 @@ const producerUrl = "http://localhost:9324/queue/consumer.fifo";
 
 const SQS_SERVICE = "SQS_SERVICE";
 const EVENT_NAME = "EVENT_NAME";
+const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
 
 @Injectable()
 class SqsService {
@@ -38,6 +39,11 @@ class SqsService {
 
   public send(data: any): Promise<any> {
     const res = this.sqsClientProxy.send<string, any>(EVENT_NAME, data);
+    return firstValueFrom(res);
+  }
+
+  public error(data: any): Promise<any> {
+    const res = this.sqsClientProxy.send<string, any>("NON_EXISTING_EVENT_NAME", data);
     return firstValueFrom(res);
   }
 }
@@ -146,6 +152,22 @@ describe("SqsServer", () => {
 
       expect(result).toEqual(data);
       expect(logSpy).toBeCalledTimes(1);
+    });
+
+    it("should handle absent handler", async () => {
+      const data = { test: true };
+      const result = await sqs
+        .sendMessage({
+          QueueUrl: consumerUrl,
+          MessageBody: JSON.stringify({ pattern: NON_EXISTING_EVENT_NAME, data }),
+          MessageGroupId: "test",
+          MessageDeduplicationId: v4(),
+        })
+        .promise();
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      expect(result).toBeDefined();
     });
   });
 });
