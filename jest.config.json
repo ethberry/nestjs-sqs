@@ -3,6 +3,6 @@
   "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
   "preset": "ts-jest",
   "rootDir": "src",
-  "testRegex": ".spec.ts$",
+  "testMatch": ["**/*.spec.ts"],
   "verbose": true
 }
