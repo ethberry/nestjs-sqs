@@ -1,11 +1,13 @@
-# nestjs-sqs
+# NestJS SQS
 
 Tested with: [AWS SQS](https://aws.amazon.com/en/sqs/) and [ElasticMQ](https://github.com/softwaremill/elasticmq).
 
-Nestjs-sqs is a project to make SQS easier to use and control some required flows with NestJS.
-This module provides decorator-based message handling suited for simple use.
+NestJS SQS is a project to make SQS easier to use and control some required flows with NestJS. This module provides
+decorator-based message handling suited for simple use.
 
-This library internally uses [bbc/sqs-producer](https://github.com/bbc/sqs-producer) and [bbc/sqs-consumer](https://github.com/bbc/sqs-consumer), and implements some more useful features on top of the basic functionality given by them.
+This library internally uses [bbc/sqs-producer](https://github.com/bbc/sqs-producer)
+and [bbc/sqs-consumer](https://github.com/bbc/sqs-consumer), and implements some more useful features on top of the
+basic functionality given by them.
 
 ## Installation
 
@@ -35,7 +37,8 @@ app.connectMicroservice({
 
 ### Decorate methods
 
-You need to decorate methods in your NestJS providers in order to have them be automatically attached as event handlers for incoming SQS messages:
+You need to decorate methods in your NestJS controller in order to have them be automatically attached as event handlers
+for incoming SQS messages:
 
 ```ts
 @Controller()
@@ -46,7 +49,7 @@ export class SqsController {
   }
 
   @EventPattern(EVENT_TYPE)
-  public handleEvent(error: Error, message: SQS.Message): Promise<void> {
+  public handleEvent(event: any): Promise<void> {
     // do something
   }
 }
@@ -69,14 +72,17 @@ export class SqsController {
       },
     ]),
   ],
+  providers: [AppService],
 })
-class AppModule {}
+class AppModule {
+}
 
 export class AppService {
   constructor(
     @Inject(SQS_SERVICE)
     private readonly sqsClientProxy: ClientProxy,
-  ) {}
+  ) {
+  }
 
   public dispatch(): Promise<void> {
     void this.client.emit(EVENT_NAME, {});
@@ -87,11 +93,13 @@ export class AppService {
 ### Code quality
 
 Terminal 1
+
 ```sh
 java -Dconfig.file=.github/build/elasticmq.conf -jar elasticmq-server-1.2.0.jar
 ```
 
 Terminal 2
+
 ```sh
 npm t
 ```

@@ -1,9 +1,13 @@
-**/*.spec.*
 /node_modules
+/coverage
 /src
+
 /jest.config.json
 /renovate.json
 /tsconfig.json
 /tsconfig.test.json
+
+**/*.spec.ts
+.*
 
 /elasticmq-server-1.2.0.jar
