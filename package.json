@@ -8,7 +8,7 @@
     "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
   "dependencies": {
-    "aws-sdk": "2.1028.0",
+    "aws-sdk": "2.1032.0",
     "sqs-consumer": "5.6.0",
     "sqs-producer": "2.1.0",
     "uuid": "8.3.2"
@@ -17,13 +17,13 @@
   "devDependencies": {
     "@gemunion/cross-env": "0.0.4",
     "@gemunion/eslint-config": "0.1.10",
-    "@nestjs/common": "8.2.0",
-    "@nestjs/core": "8.2.0",
-    "@nestjs/microservices": "8.2.0",
-    "@nestjs/platform-express": "8.2.0",
-    "@nestjs/testing": "8.2.0",
-    "@types/jest": "27.0.2",
-    "@types/uuid": "8.3.1",
+    "@nestjs/common": "8.2.2",
+    "@nestjs/core": "8.2.2",
+    "@nestjs/microservices": "8.2.2",
+    "@nestjs/platform-express": "8.2.2",
+    "@nestjs/testing": "8.2.2",
+    "@types/jest": "27.0.3",
+    "@types/uuid": "8.3.3",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "eslint": "7.32.0",
@@ -44,7 +44,7 @@
     "rimraf": "3.0.2",
     "rxjs": "7.4.0",
     "ts-jest": "27.0.7",
-    "typescript": "4.4.4"
+    "typescript": "4.5.2"
   },
   "keywords": [],
   "license": "MIT",
