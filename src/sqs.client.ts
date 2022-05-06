@@ -77,7 +77,7 @@ export class SqsClient extends ClientProxy {
     if (!callback) {
       return undefined;
     }
-    // eslint-disable-next-line node/no-callback-literal
+    // eslint-disable-next-line n/no-callback-literal
     callback({
       response,
       err,
