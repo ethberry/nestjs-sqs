@@ -1,4 +1,5 @@
 {
+  "collectCoverage": true,
   "coverageDirectory": "../coverage",
   "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
   "preset": "ts-jest",
