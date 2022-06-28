@@ -66,7 +66,9 @@ export class SqsClient extends ClientProxy {
   }
 
   public connect(): Promise<any> {
-    this.createClient();
+    if (!this.producer) {
+      this.createClient();
+    }
     return Promise.resolve();
   }
 
