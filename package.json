@@ -8,7 +8,7 @@
     "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
   "dependencies": {
-    "aws-sdk": "2.1213.0",
+    "aws-sdk": "2.1218.0",
     "sqs-consumer": "5.7.0",
     "sqs-producer": "2.1.0",
     "uuid": "8.3.2"
@@ -24,8 +24,8 @@
     "@nestjs/testing": "9.0.11",
     "@types/jest": "28.1.8",
     "@types/uuid": "8.3.4",
-    "@typescript-eslint/eslint-plugin": "5.36.2",
-    "@typescript-eslint/parser": "5.36.2",
+    "@typescript-eslint/eslint-plugin": "5.37.0",
+    "@typescript-eslint/parser": "5.37.0",
     "eslint": "8.23.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-standard": "17.0.0",
