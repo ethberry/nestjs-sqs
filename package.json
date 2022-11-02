@@ -11,7 +11,7 @@
     "aws-sdk": "2.1245.0",
     "sqs-consumer": "5.7.0",
     "sqs-producer": "2.1.0",
-    "uuid": "8.3.2"
+    "uuid": "9.0.0"
   },
   "description": "",
   "devDependencies": {
