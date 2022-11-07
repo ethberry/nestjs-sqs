@@ -49,6 +49,27 @@ jobs:
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
 
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ./.npmrc
+
+      - name: Authenticate NPM Registry & Configure Git User
+        run: |
+          echo "save-exact=true" > .npmrc
+          echo "package-lock=false" >> .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
+          git update-index --assume-unchanged .npmrc
+          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Git push
         run: git push --no-verify && git push --tags --no-verify
         env:
