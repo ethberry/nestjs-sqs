@@ -2,7 +2,8 @@ import { Logger } from "@nestjs/common";
 import { ClientProxy, PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
-import { Consumer, SQSMessage } from "sqs-consumer";
+import { Consumer } from "sqs-consumer";
+import { Message, SQSClient } from "@aws-sdk/client-sqs";
 
 import { ISqsClientOptions } from "./interfaces";
 import { SqsDeserializer } from "./sqs.deserializer";
@@ -25,7 +26,13 @@ export class SqsClient extends ClientProxy {
     const { producerUrl, consumerUrl, ...options } = this.options;
 
     this.consumer = Consumer.create({
-      ...options,
+      sqs: new SQSClient({
+        region: "none",
+        credentials: {
+          accessKeyId: "x",
+          secretAccessKey: "x",
+        },
+      }),
       queueUrl: consumerUrl,
       handleMessage: this.handleMessage.bind(this),
     });
@@ -72,7 +79,7 @@ export class SqsClient extends ClientProxy {
     return Promise.resolve();
   }
 
-  public async handleMessage(message: SQSMessage): Promise<void> {
+  public async handleMessage(message: Message): Promise<void> {
     const { id, response, err, status, isDisposed } = await this.deserializer.deserialize(message);
     const callback = this.routingMap.get(id);
 

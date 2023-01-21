@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { CustomTransportStrategy, IncomingRequest, Server } from "@nestjs/microservices";
 import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
-import { Consumer, SQSMessage } from "sqs-consumer";
+import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
 import { from } from "rxjs";
+import { Message } from "@aws-sdk/client-sqs";
 
 import { ISqsServerOptions } from "./interfaces";
 import { SqsSerializer } from "./sqs.serializer";
@@ -22,11 +23,11 @@ export class SqsServer extends Server implements CustomTransportStrategy {
   }
 
   public createClient(): void {
-    const { consumerUrl, producerUrl, ...options } = this.options;
+    const { consumerOptions, producerOptions } = this.options;
 
     this.consumer = Consumer.create({
-      ...options,
-      queueUrl: consumerUrl,
+      sqs: consumerOptions.sqs,
+      queueUrl: consumerOptions.queueUrl,
       handleMessage: this.handleMessage.bind(this),
     });
 
@@ -45,8 +46,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     this.consumer.start();
 
     this.producer = Producer.create({
-      ...options,
-      queueUrl: producerUrl,
+      queueUrl: producerOptions.queueUrl,
     });
   }
 
@@ -55,7 +55,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     callback();
   }
 
-  public async handleMessage(message: SQSMessage): Promise<void> {
+  public async handleMessage(message: Message): Promise<void> {
     const { pattern, data, id } = (await this.deserializer.deserialize(message)) as IncomingRequest;
 
     const handler = this.getHandlerByPattern(pattern);
