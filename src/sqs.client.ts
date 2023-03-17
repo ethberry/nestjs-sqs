@@ -24,10 +24,9 @@ export class SqsClient extends ClientProxy {
 
   public createClient(): void {
     const { producerUrl, consumerUrl, ...options } = this.options;
-
     this.consumer = Consumer.create({
       sqs: new SQSClient({
-        region: "none",
+        region: "eu-west-1",
         credentials: {
           accessKeyId: "x",
           secretAccessKey: "x",

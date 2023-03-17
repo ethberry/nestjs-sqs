@@ -10,7 +10,7 @@ import { SqsClient } from "./sqs.client";
 
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
-  region: "us-east-1",
+  region: "eu-west-1",
   credentials: {
     accessKeyId: "x",
     secretAccessKey: "x",
