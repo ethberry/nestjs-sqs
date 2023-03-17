@@ -3,7 +3,7 @@ import { ClientProxy, PacketId, ReadPacket, WritePacket } from "@nestjs/microser
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
 import { Consumer } from "sqs-consumer";
-import { Message, SQSClient } from "@aws-sdk/client-sqs";
+import { Message } from "@aws-sdk/client-sqs";
 
 import { ISqsClientOptions } from "./interfaces";
 import { SqsDeserializer } from "./sqs.deserializer";
@@ -25,13 +25,7 @@ export class SqsClient extends ClientProxy {
   public createClient(): void {
     const { producerUrl, consumerUrl, ...options } = this.options;
     this.consumer = Consumer.create({
-      sqs: new SQSClient({
-        region: "eu-west-1",
-        credentials: {
-          accessKeyId: "x",
-          secretAccessKey: "x",
-        },
-      }),
+      sqs: options.sqs,
       queueUrl: consumerUrl,
       handleMessage: this.handleMessage.bind(this),
     });
