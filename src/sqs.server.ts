@@ -27,6 +27,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
 
     this.consumer = Consumer.create({
       sqs: consumerOptions.sqs,
+      region: "none",
       queueUrl: consumerOptions.queueUrl,
       handleMessage: this.handleMessage.bind(this),
     });
@@ -46,6 +47,8 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     this.consumer.start();
 
     this.producer = Producer.create({
+      sqs: producerOptions.sqs,
+      region: "none",
       queueUrl: producerOptions.queueUrl,
     });
   }

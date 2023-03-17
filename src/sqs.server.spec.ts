@@ -10,7 +10,7 @@ import { SqsClient } from "./sqs.client";
 
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
-  region: "eu-west-1",
+  region: "none",
   credentials: {
     accessKeyId: "x",
     secretAccessKey: "x",
@@ -92,9 +92,11 @@ describe("SqsServer", () => {
     app.connectMicroservice({
       strategy: new SqsServer({
         consumerOptions: {
+          sqs,
           queueUrl: consumerUrl,
         },
         producerOptions: {
+          sqs,
           queueUrl: producerUrl,
         },
       }),
@@ -136,7 +138,7 @@ describe("SqsServer", () => {
     it("should receive event", async () => {
       const data = { test: true };
       const params = {
-        DelaySeconds: 10,
+        // DelaySeconds: 10,
         MessageAttributes: {
           Title: {
             DataType: "String",
