@@ -8,21 +8,22 @@ import { v4 } from "uuid";
 import { SqsServer } from "./sqs.server";
 import { SqsClient } from "./sqs.client";
 
+const AWS_REGION = "eu-west-1";
+const SQS_SERVICE = "SQS_SERVICE";
+const EVENT_NAME = "EVENT_NAME";
+const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
+
+const consumerUrl = "http://localhost:9324/queue/producer.fifo";
+const producerUrl = "http://localhost:9324/queue/consumer.fifo";
+
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
-  region: "eu-west-1",
+  region: AWS_REGION,
   credentials: {
     accessKeyId: "x",
     secretAccessKey: "x",
   },
 });
-
-const consumerUrl = "http://localhost:9324/queue/producer.fifo";
-const producerUrl = "http://localhost:9324/queue/consumer.fifo";
-
-const SQS_SERVICE = "SQS_SERVICE";
-const EVENT_NAME = "EVENT_NAME";
-const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
 
 @Injectable()
 class SqsService {
@@ -93,10 +94,12 @@ describe("SqsServer", () => {
       strategy: new SqsServer({
         consumerOptions: {
           sqs,
+          region: AWS_REGION,
           queueUrl: consumerUrl,
         },
         producerOptions: {
           sqs,
+          region: AWS_REGION,
           queueUrl: producerUrl,
         },
       }),
