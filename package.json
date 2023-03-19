@@ -1,16 +1,16 @@
 {
   "author": {
-    "email": "TrejGun+OpenSourse@gmail.com",
+    "email": "trejgun+opensourse@gemunion.io",
     "name": "TrejGun",
-    "url": "https://trejgun.github.io/"
+    "url": "https://gemunion.io/"
   },
   "bugs": {
     "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "3.254.0",
-    "sqs-consumer": "6.2.0",
-    "sqs-producer": "3.1.0",
+    "@aws-sdk/client-sqs": "3.294.0",
+    "sqs-consumer": "7.0.3",
+    "sqs-producer": "3.1.1",
     "uuid": "9.0.0"
   },
   "description": "",
@@ -40,7 +40,7 @@
     "lint-staged": "13.2.0",
     "prettier": "2.8.4",
     "reflect-metadata": "0.1.13",
-    "rimraf": "3.0.2",
+    "rimraf": "4.4.0",
     "rxjs": "7.8.0",
     "ts-jest": "29.0.5",
     "typescript": "4.9.5"
@@ -50,10 +50,10 @@
   "main": "./dist/index.js",
   "name": "@gemunion/nestjs-sqs",
   "peerDependencies": {
-    "@nestjs/common": "^8 || ^9.0.0",
-    "@nestjs/core": "^8 || ^9.0.0",
-    "@nestjs/microservices": "^8 || ^9.0.0",
-    "rxjs": "^7"
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/microservices": "^9.0.0",
+    "rxjs": "^7.8.0"
   },
   "repository": {
     "type": "git",
