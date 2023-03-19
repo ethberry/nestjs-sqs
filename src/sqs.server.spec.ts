@@ -1,25 +1,29 @@
 import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ClientProxy, ClientsModule, MessagePattern } from "@nestjs/microservices";
-import { Credentials, SQS } from "aws-sdk";
+import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { firstValueFrom } from "rxjs";
 import { v4 } from "uuid";
 
 import { SqsServer } from "./sqs.server";
 import { SqsClient } from "./sqs.client";
 
-const sqs = new SQS({
-  apiVersion: "2012-11-05",
-  credentials: new Credentials("x", "x"),
-  region: "none",
-});
+const AWS_REGION = "eu-west-1";
+const SQS_SERVICE = "SQS_SERVICE";
+const EVENT_NAME = "EVENT_NAME";
+const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
 
 const consumerUrl = "http://localhost:9324/queue/producer.fifo";
 const producerUrl = "http://localhost:9324/queue/consumer.fifo";
 
-const SQS_SERVICE = "SQS_SERVICE";
-const EVENT_NAME = "EVENT_NAME";
-const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
+const sqs = new SQSClient({
+  endpoint: "http://localhost:9324",
+  region: AWS_REGION,
+  credentials: {
+    accessKeyId: "x",
+    secretAccessKey: "x",
+  },
+});
 
 @Injectable()
 class SqsService {
@@ -88,9 +92,16 @@ describe("SqsServer", () => {
     app = module.createNestApplication();
     app.connectMicroservice({
       strategy: new SqsServer({
-        consumerUrl,
-        producerUrl,
-        sqs,
+        consumerOptions: {
+          sqs,
+          region: AWS_REGION,
+          queueUrl: consumerUrl,
+        },
+        producerOptions: {
+          sqs,
+          region: AWS_REGION,
+          queueUrl: producerUrl,
+        },
       }),
     });
     await app.startAllMicroservices();
@@ -129,14 +140,28 @@ describe("SqsServer", () => {
 
     it("should receive event", async () => {
       const data = { test: true };
-      const result = await sqs
-        .sendMessage({
-          QueueUrl: consumerUrl,
-          MessageBody: JSON.stringify({ pattern: EVENT_NAME, data }),
-          MessageGroupId: "test",
-          MessageDeduplicationId: v4(),
-        })
-        .promise();
+      const params = {
+        // DelaySeconds: 10,
+        MessageAttributes: {
+          Title: {
+            DataType: "String",
+            StringValue: "The Whistler",
+          },
+          Author: {
+            DataType: "String",
+            StringValue: "John Grisham",
+          },
+          WeeksOn: {
+            DataType: "Number",
+            StringValue: "6",
+          },
+        },
+        MessageBody: JSON.stringify({ pattern: EVENT_NAME, data }),
+        MessageGroupId: "test",
+        MessageDeduplicationId: v4(),
+        QueueUrl: consumerUrl,
+      };
+      const result = await sqs.send(new SendMessageCommand(params));
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -156,14 +181,28 @@ describe("SqsServer", () => {
 
     it("should handle absent handler", async () => {
       const data = { test: true };
-      const result = await sqs
-        .sendMessage({
-          QueueUrl: consumerUrl,
-          MessageBody: JSON.stringify({ pattern: NON_EXISTING_EVENT_NAME, data }),
-          MessageGroupId: "test",
-          MessageDeduplicationId: v4(),
-        })
-        .promise();
+      const params = {
+        MessageAttributes: {
+          Title: {
+            DataType: "String",
+            StringValue: "The Whistler",
+          },
+          Author: {
+            DataType: "String",
+            StringValue: "John Grisham",
+          },
+          WeeksOn: {
+            DataType: "Number",
+            StringValue: "6",
+          },
+        },
+        MessageBody: JSON.stringify({ pattern: NON_EXISTING_EVENT_NAME, data }),
+        MessageGroupId: "test",
+        MessageDeduplicationId: v4(),
+        QueueUrl: consumerUrl,
+      };
+
+      const result = await sqs.send(new SendMessageCommand(params));
 
       await new Promise(resolve => setTimeout(resolve, 1000));
 

@@ -1,8 +1,14 @@
 import { Type } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
-import { SqsConsumerOptions } from "./consumer";
+import { ClientProxy, Deserializer, Serializer } from "@nestjs/microservices";
+import { ConsumerOptions } from "sqs-consumer";
+import { ProducerOptions } from "sqs-producer";
 
 export interface ISqsServerOptions {
   customClass: Type<ClientProxy>;
-  options: SqsConsumerOptions;
+  options: {
+    consumerOptions: ConsumerOptions;
+    producerOptions: ProducerOptions;
+    serializer?: Serializer;
+    deserializer?: Deserializer;
+  };
 }

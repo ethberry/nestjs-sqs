@@ -5,7 +5,7 @@ Tested with: [AWS SQS](https://aws.amazon.com/en/sqs/) and [ElasticMQ](https://g
 NestJS SQS is a project to make SQS easier to use and control some required flows with NestJS. This module provides
 decorator-based message handling suited for simple use.
 
-This library internally uses [bbc/sqs-producer](https://github.com/bbc/sqs-producer)
+This library internally relies on [bbc/sqs-producer](https://github.com/bbc/sqs-producer)
 and [bbc/sqs-consumer](https://github.com/bbc/sqs-consumer), and implements some more useful features on top of the
 basic functionality given by them.
 
@@ -22,15 +22,28 @@ $ npm i --save @gemunion/nestjs-sqs
 Just like you register any other microservice
 
 ```ts
+import { SQSClient } from "@aws-sdk/client-sqs";
+import { SqsServer } from "@gemunion/nestjs-sqs";
+
+const sqs = new SQSClient({
+  endpoint: "http://localhost:9324",
+  region: "none",
+  credentials: {
+    accessKeyId: "x",
+    secretAccessKey: "x",
+  },
+});
+
 app.connectMicroservice({
   strategy: new SqsServer({
-    consumerUrl: "http://localhost:9324/queue/producer.fifo",
-    producerUrl: "http://localhost:9324/queue/consumer.fifo",
-    sqs: new SQS({
-      apiVersion: "2012-11-05",
-      credentials: new Credentials("x", "x"),
-      region: "none",
-    }),
+    consumerOptions: {
+      sqs,
+      queueUrl: "http://localhost:9324/queue/producer.fifo",
+    },
+    producerOptions: {
+      sqs,
+      queueUrl: "http://localhost:9324/queue/consumer.fifo",
+    },
   }),
 });
 ```
@@ -58,6 +71,18 @@ export class SqsController {
 ### Produce messages
 
 ```ts
+import { SQSClient } from "@aws-sdk/client-sqs";
+import { SqsClient, SQS_SERVICE } from "@gemunion/nestjs-sqs";
+
+const sqs = new SQSClient({
+  endpoint: "http://localhost:9324",
+  region: "none",
+  credentials: {
+    accessKeyId: "x",
+    secretAccessKey: "x",
+  },
+});
+
 @Module({
   imports: [
     ClientsModule.register([
@@ -65,8 +90,8 @@ export class SqsController {
         name: SQS_SERVICE,
         customClass: SqsClient,
         options: {
-          consumerUrl: producerUrl,
-          producerUrl: consumerUrl,
+          consumerUrl: "http://localhost:9324/queue/consumer.fifo",
+          producerUrl: "http://localhost:9324/queue/producer.fifo",
           sqs,
         },
       },
@@ -95,7 +120,7 @@ export class AppService {
 Terminal 1
 
 ```sh
-java -Dconfig.file=.github/build/elasticmq.conf -jar elasticmq-server-1.2.0.jar
+java -Dconfig.file=.github/build/elasticmq.conf -jar elasticmq-server-1.3.9.jar
 ```
 
 Terminal 2
