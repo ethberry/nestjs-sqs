@@ -16,7 +16,7 @@
   "description": "",
   "devDependencies": {
     "@gemunion/cross-env": "0.0.4",
-    "@gemunion/eslint-config": "2.0.7",
+    "@gemunion/eslint-config": "3.0.2",
     "@nestjs/common": "9.4.2",
     "@nestjs/core": "9.4.2",
     "@nestjs/microservices": "9.4.2",
