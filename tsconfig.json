@@ -21,7 +21,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
-    "target": "es2020"
+    "target": "es2021"
   },
   "exclude": ["node_modules", "./dist"]
 }
