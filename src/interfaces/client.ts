@@ -1,7 +1,7 @@
-import { Type } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
+import type { Type } from "@nestjs/common";
+import type { ClientProxy } from "@nestjs/microservices";
 
-import { ProducerOptions } from "./producer";
+import type { ProducerOptions } from "./producer";
 
 export interface ISqsClientOptions {
   customClass: Type<ClientProxy>;

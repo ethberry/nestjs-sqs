@@ -1,4 +1,4 @@
-import { Serializer } from "@nestjs/microservices";
+import type { Serializer } from "@nestjs/microservices";
 import { v4 } from "uuid";
 
 export class SqsSerializer implements Serializer {

@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { CustomTransportStrategy, IncomingRequest, Server } from "@nestjs/microservices";
+import type { CustomTransportStrategy, IncomingRequest } from "@nestjs/microservices";
+import { Server } from "@nestjs/microservices";
 import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
 import { from } from "rxjs";
-import { Message } from "@aws-sdk/client-sqs";
+import type { Message } from "@aws-sdk/client-sqs";
 
-import { ISqsServerOptions } from "./interfaces";
+import type { ISqsServerOptions } from "./interfaces";
 import { SqsSerializer } from "./sqs.serializer";
 import { SqsDeserializer } from "./sqs.deserializer";
 

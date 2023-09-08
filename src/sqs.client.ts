@@ -1,9 +1,10 @@
 import { Logger } from "@nestjs/common";
-import { ClientProxy, PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
+import { ClientProxy } from "@nestjs/microservices";
+import type { PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
 import { Consumer } from "sqs-consumer";
-import { Message } from "@aws-sdk/client-sqs";
+import type { Message } from "@aws-sdk/client-sqs";
 
 import { ISqsClientOptions } from "./interfaces";
 import { SqsDeserializer } from "./sqs.deserializer";
