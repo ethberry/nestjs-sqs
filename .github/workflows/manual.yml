@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # BEGIN INSTALL
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # pulls all commits (needed for lerna to correctly version)
           # see https://stackoverflow.com/a/60184319/9285308 & https://github.com/actions/checkout
