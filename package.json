@@ -67,5 +67,5 @@
     "test": "jest --detectOpenHandles --runInBand --forceExit"
   },
   "types": "./dist/index.d.ts",
-  "version": "4.0.1"
+  "version": "4.0.2"
 }
