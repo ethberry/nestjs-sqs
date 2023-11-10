@@ -50,10 +50,10 @@
   "main": "./dist/index.js",
   "name": "@gemunion/nestjs-sqs",
   "peerDependencies": {
-    "@nestjs/common": "^9.0.0 || ^10.0.0",
-    "@nestjs/core": "^9.0.0 || ^10.0.0",
-    "@nestjs/microservices": "^9.0.0 || ^10.0.0",
-    "rxjs": "^7.8.0"
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/microservices": "^10.0.0",
+    "rxjs": "^7.0.0"
   },
   "repository": {
     "type": "git",
