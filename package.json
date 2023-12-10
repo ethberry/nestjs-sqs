@@ -8,8 +8,8 @@
     "url": "https://github.com/gemunion/nestjs-sqs/issues"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "3.470.0",
-    "sqs-consumer": "7.5.0",
+    "@aws-sdk/client-sqs": "3.441.0",
+    "sqs-consumer": "7.4.0",
     "sqs-producer": "3.4.0",
     "uuid": "9.0.1"
   },
