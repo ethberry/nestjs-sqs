@@ -16,6 +16,8 @@ const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
 const consumerUrl = "http://localhost:9324/queue/producer.fifo";
 const producerUrl = "http://localhost:9324/queue/consumer.fifo";
 
+// https://github.com/aws/aws-sdk-js-v3/issues/5211#issuecomment-1718372984
+// @ts-ignore
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
   region: AWS_REGION,

@@ -5,6 +5,10 @@
     {
       "updateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "matchPackageNames": ["@aws-sdk/client-sqs"],
+      "allowedVersions": "<=3.441.0"
     }
   ]
 }
