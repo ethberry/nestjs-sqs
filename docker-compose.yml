@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  queue:
+    image: s12v/elasticmq
+    volumes:
+      - ./elasticmq.conf:/etc/elasticmq/elasticmq.conf
+    ports:
+      - "9324:9324"

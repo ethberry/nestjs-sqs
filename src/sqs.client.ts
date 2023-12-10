@@ -45,9 +45,18 @@ export class SqsClient extends ClientProxy {
 
     this.consumer.start();
 
+    // interface ProducerOptions {
+    //   queueUrl: string;
+    //   batchSize?: number;
+    //   sqs?: SQSClient;
+    //   region?: string;
+    // }
     this.producer = Producer.create({
-      ...options,
+      // ...options,
       queueUrl: producerUrl,
+      region: options.region,
+      sqs: options.sqs,
+      batchSize: options.batchSize,
     });
   }
 

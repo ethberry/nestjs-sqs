@@ -108,6 +108,8 @@ describe("SqsServer", () => {
     });
     await app.startAllMicroservices();
 
+    // https://github.com/aws/aws-sdk-js-v3/issues/5211#issuecomment-1718372984
+    // @ts-ignore
     sqsService = module.get<SqsService>(SqsService);
   });
 
