@@ -24,8 +24,8 @@
     "@nestjs/testing": "10.3.10",
     "@types/jest": "29.5.12",
     "@types/uuid": "9.0.8",
-    "@typescript-eslint/eslint-plugin": "7.16.1",
-    "@typescript-eslint/parser": "7.16.1",
+    "@typescript-eslint/eslint-plugin": "7.17.0",
+    "@typescript-eslint/parser": "7.17.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-config-standard": "17.1.0",
@@ -34,7 +34,7 @@
     "eslint-plugin-jest": "27.9.0",
     "eslint-plugin-n": "16.6.2",
     "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-promise": "6.5.1",
+    "eslint-plugin-promise": "6.6.0",
     "husky": "4.3.8",
     "jest": "29.7.0",
     "lint-staged": "15.2.7",
@@ -43,7 +43,7 @@
     "rimraf": "5.0.9",
     "rxjs": "7.8.1",
     "ts-jest": "29.2.3",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   },
   "keywords": [],
   "license": "MIT",
