@@ -11,7 +11,7 @@
     "@aws-sdk/client-sqs": "3.441.0",
     "sqs-consumer": "7.5.0",
     "sqs-producer": "3.4.0",
-    "uuid": "9.0.1"
+    "uuid": "10.0.0"
   },
   "description": "",
   "devDependencies": {
@@ -23,7 +23,7 @@
     "@nestjs/platform-express": "10.3.10",
     "@nestjs/testing": "10.3.10",
     "@types/jest": "29.5.12",
-    "@types/uuid": "9.0.8",
+    "@types/uuid": "10.0.0",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "eslint": "8.57.0",
