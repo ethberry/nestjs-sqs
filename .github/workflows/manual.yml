@@ -27,6 +27,7 @@ jobs:
         run: |
           echo "save-exact=true" > .npmrc
           echo "package-lock=false" >> .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
           echo "@gemunion:registry=https://npm.pkg.github.com/" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN" >> .npmrc
           git update-index --assume-unchanged .npmrc
