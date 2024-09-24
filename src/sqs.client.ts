@@ -14,7 +14,7 @@ export class SqsClient extends ClientProxy {
   private producer: Producer;
   private consumer: Consumer;
 
-  private readonly logger = new Logger("SqsService");
+  private readonly logger = new Logger(SqsClient.name);
 
   constructor(protected readonly options: ISqsClientOptions["options"]) {
     super();
@@ -45,14 +45,7 @@ export class SqsClient extends ClientProxy {
 
     this.consumer.start();
 
-    // interface ProducerOptions {
-    //   queueUrl: string;
-    //   batchSize?: number;
-    //   sqs?: SQSClient;
-    //   region?: string;
-    // }
     this.producer = Producer.create({
-      // ...options,
       queueUrl: producerUrl,
       region: options.region,
       sqs: options.sqs,
@@ -89,7 +82,7 @@ export class SqsClient extends ClientProxy {
     if (!callback) {
       return undefined;
     }
-    // eslint-disable-next-line n/no-callback-literal
+
     callback({
       response,
       err,

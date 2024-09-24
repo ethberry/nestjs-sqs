@@ -15,5 +15,3 @@ npm-debug.log
 package-lock.json
 yarn.lock
 /report.*.json
-
-/elasticmq-server-1.2.0.jar

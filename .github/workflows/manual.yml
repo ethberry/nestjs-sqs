@@ -1,4 +1,3 @@
-
 name: Manual release Publish
 on:
   workflow_dispatch:
@@ -75,4 +74,3 @@ jobs:
         run: git push --no-verify && git push --tags --no-verify
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
-

@@ -8,7 +8,7 @@ import { v4 } from "uuid";
 import { SqsServer } from "./sqs.server";
 import { SqsClient } from "./sqs.client";
 
-const AWS_REGION = "eu-west-1";
+const AWS_REGION = "elasticmq";
 const SQS_SERVICE = "SQS_SERVICE";
 const EVENT_NAME = "EVENT_NAME";
 const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
@@ -16,8 +16,6 @@ const NON_EXISTING_EVENT_NAME = "NON_EXISTING_EVENT_NAME";
 const consumerUrl = "http://localhost:9324/queue/producer.fifo";
 const producerUrl = "http://localhost:9324/queue/consumer.fifo";
 
-// https://github.com/aws/aws-sdk-js-v3/issues/5211#issuecomment-1718372984
-// @ts-ignore
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
   region: AWS_REGION,
@@ -139,7 +137,7 @@ describe("SqsServer", () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       expect(result).toHaveLength(1);
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
     });
 
     it("should receive event", async () => {
@@ -170,7 +168,7 @@ describe("SqsServer", () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       expect(result).toBeDefined();
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
     });
 
     it("should send/receive event", async () => {
@@ -180,7 +178,7 @@ describe("SqsServer", () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       expect(result).toEqual(data);
-      expect(logSpy).toBeCalledTimes(1);
+      expect(logSpy).toHaveBeenCalledTimes(1);
     });
 
     it("should handle absent handler", async () => {

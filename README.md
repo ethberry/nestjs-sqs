@@ -99,15 +99,13 @@ const sqs = new SQSClient({
   ],
   providers: [AppService],
 })
-class AppModule {
-}
+class AppModule {}
 
 export class AppService {
   constructor(
     @Inject(SQS_SERVICE)
     private readonly sqsClientProxy: ClientProxy,
-  ) {
-  }
+  ) {}
 
   public dispatch(): Promise<void> {
     void this.client.emit(EVENT_NAME, {});
@@ -117,15 +115,8 @@ export class AppService {
 
 ### Code quality
 
-Terminal 1
-
 ```sh
-java -Dconfig.file=.github/build/elasticmq.conf -jar elasticmq-server-1.3.9.jar
-```
-
-Terminal 2
-
-```sh
+docker compose up -d
 npm t
 ```
 
