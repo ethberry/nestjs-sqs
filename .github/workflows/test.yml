@@ -18,10 +18,22 @@ jobs:
     services:
       elasticmq:
         image: softwaremill/elasticmq
-        options: -p 9324:9324 -v ${{ github.workspace }}/elasticmq.conf:/opt/elasticmq.conf --name elasticmq
+        ports:
+          - 9324:9324
+        # options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
     steps:
       - uses: actions/checkout@v4
         name: Checkout code
+      - run: sudo cp ${{ github.workspace }}/elasticmq.conf /tmp/elasticmq.conf
+      # - name: Restart elasticmq
+      #   uses: docker://docker
+      #   with:
+      #     args: docker restart elasticmq
+      - name: Start ElasticMQ container with custom config
+        run: |
+          docker run -d -p 9324:9324 \
+          -v /tmp/elasticmq.conf:/opt/elasticmq.conf \
+          --name elasticmq
       - uses: actions/setup-node@v4
         name: Use Node.js ${{ matrix.node-version }}
         with:
