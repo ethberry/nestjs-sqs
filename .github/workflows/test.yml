@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout code
-      - run: sudo cp ${{ github.workspace }}/.github/build/elasticmq.conf /tmp/elasticmq
+      - run: sudo cp ${{ github.workspace }}/elasticmq.conf /tmp/elasticmq
       - name: Restart elasticmq
         uses: docker://docker
         with:
