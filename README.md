@@ -12,7 +12,7 @@ basic functionality given by them.
 ## Installation
 
 ```shell script
-$ npm i --save @gemunion/nestjs-sqs
+$ npm i --save @ethberry/nestjs-sqs
 ```
 
 ## Quick Start
@@ -23,7 +23,7 @@ Just like you register any other microservice
 
 ```ts
 import { SQSClient } from "@aws-sdk/client-sqs";
-import { SqsServer } from "@gemunion/nestjs-sqs";
+import { SqsServer } from "@ethberry/nestjs-sqs";
 
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",
@@ -72,7 +72,7 @@ export class SqsController {
 
 ```ts
 import { SQSClient } from "@aws-sdk/client-sqs";
-import { SqsClient, SQS_SERVICE } from "@gemunion/nestjs-sqs";
+import { SqsClient, SQS_SERVICE } from "@ethberry/nestjs-sqs";
 
 const sqs = new SQSClient({
   endpoint: "http://localhost:9324",

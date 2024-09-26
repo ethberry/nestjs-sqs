@@ -7,7 +7,6 @@
 /tsconfig.json
 /tsconfig.eslint.json
 /eslint.config.mjs
-/jest.config.json
 /docker-compose.yml
 /elasticmq.conf
 

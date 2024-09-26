@@ -1,5 +1,5 @@
-import typescriptRules from "@gemunion/eslint-config/presets/tsx.mjs";
-import jestRules from "@gemunion/eslint-config/tests/jest.mjs";
+import typescriptRules from "@ethberry/eslint-config/presets/tsx.mjs";
+import jestRules from "@ethberry/eslint-config/tests/jest.mjs";
 
 export default [
   {

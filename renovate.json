@@ -1,14 +1,10 @@
 {
-  "extends": ["github>gemunion/renovate-config"],
+  "extends": ["github>ethberry/renovate-config"],
   "baseBranches": ["master"],
   "packageRules": [
     {
       "updateTypes": ["minor", "patch"],
       "automerge": true
-    },
-    {
-      "matchPackageNames": ["@aws-sdk/client-sqs"],
-      "allowedVersions": "<=3.441.0"
     }
   ]
 }

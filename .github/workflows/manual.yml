@@ -27,11 +27,11 @@ jobs:
           echo "save-exact=true" > .npmrc
           echo "package-lock=false" >> .npmrc
           echo "legacy-peer-deps=true" >> .npmrc
-          echo "@gemunion:registry=https://npm.pkg.github.com/" >> .npmrc
+          echo "@ethberry:registry=https://npm.pkg.github.com/" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN" >> .npmrc
           git update-index --assume-unchanged .npmrc
-          npx npm-cli-login -u $GITHUBUSER -p $GITHUBTOKEN -e $GITHUBEMAIL -r https://npm.pkg.github.com -s @gemunion --config-path="./"
-          git config --global user.name '@gemunion'
+          npx npm-cli-login -u $GITHUBUSER -p $GITHUBTOKEN -e $GITHUBEMAIL -r https://npm.pkg.github.com -s @ethberry --config-path="./"
+          git config --global user.name '@ethberry'
           git config --global user.email $GITHUBEMAIL
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
@@ -60,7 +60,7 @@ jobs:
           echo "package-lock=false" >> .npmrc
           echo "legacy-peer-deps=true" >> .npmrc
           git update-index --assume-unchanged .npmrc
-          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "@ethberry:registry=https://registry.npmjs.org/" >> .npmrc
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
