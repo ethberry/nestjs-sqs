@@ -15,10 +15,10 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-    services:
-      elasticmq:
-        image: softwaremill/elasticmq
-        options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
+    # services:
+    #   elasticmq:
+    #     image: softwaremill/elasticmq
+    #     options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
     steps:
       - uses: actions/checkout@v4
         name: Checkout code
@@ -27,8 +27,8 @@ jobs:
         uses: docker://docker
         with:
           args: docker restart elasticmq
-      # - name: Start ElasticMQ container with custom config
-      #   run: docker run -d -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq softwaremill/elasticmq
+      - name: Start ElasticMQ container with custom config
+        run: docker run -d -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq softwaremill/elasticmq
       - uses: actions/setup-node@v4
         name: Use Node.js ${{ matrix.node-version }}
         with:
