@@ -17,7 +17,7 @@ jobs:
         node-version: [22.x]
     services:
       elasticmq:
-        image: s12v/elasticmq
+        image: softwaremill/elasticmq
         options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
     steps:
       - uses: actions/checkout@v4
