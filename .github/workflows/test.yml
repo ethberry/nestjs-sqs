@@ -18,7 +18,7 @@ jobs:
     services:
       elasticmq:
         image: softwaremill/elasticmq
-        options: -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq
+        options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
     steps:
       - uses: actions/checkout@v4
         name: Checkout code
