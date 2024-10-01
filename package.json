@@ -2,7 +2,7 @@
   "author": {
     "email": "trejgun+opensource@gmail.com",
     "name": "TrejGun",
-    "url": "https://linkedin.com/in/trejgun/"
+    "url": "https://ethberry.io/"
   },
   "bugs": {
     "url": "https://github.com/ethberry/nestjs-sqs/issues"
@@ -24,7 +24,7 @@
     "@nestjs/testing": "10.4.4",
     "@types/jest": "29.5.13",
     "@types/uuid": "10.0.0",
-    "husky": "4.3.8",
+    "husky": "9.1.6",
     "jest": "29.7.0",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
@@ -55,7 +55,7 @@
     "build": "tsc",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
-    "prepare": "npm run build",
+    "prepare": "husky",
     "prettier": "prettier . --write",
     "test": "jest --detectOpenHandles --runInBand --forceExit"
   },
