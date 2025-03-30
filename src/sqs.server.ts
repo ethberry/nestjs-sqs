@@ -4,7 +4,6 @@ import { Server } from "@nestjs/microservices";
 import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
-import { from } from "rxjs";
 import type { Message } from "@aws-sdk/client-sqs";
 
 import type { ISqsServerOptions } from "./interfaces";
@@ -49,7 +48,9 @@ export class SqsServer extends Server implements CustomTransportStrategy {
   }
 
   public listen(callback: () => void): void {
-    this.createClient();
+    if (!this.producer) {
+      this.createClient();
+    }
     callback();
   }
 
@@ -74,7 +75,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
         id,
         ...paket,
       });
-      return from(this.producer.send(serializedPacket));
+      return this.producer.send(serializedPacket);
     });
   }
 
@@ -88,5 +89,16 @@ export class SqsServer extends Server implements CustomTransportStrategy {
 
   protected initializeDeserializer(options: ISqsServerOptions["options"]): void {
     this.deserializer = options?.deserializer ?? new SqsDeserializer();
+  }
+
+  unwrap<T>(): T {
+    return [this.consumer, this.producer] as T;
+  }
+
+  on<EventKey extends string | number | symbol = string | number | symbol, EventCallback = any>(
+    _event: EventKey,
+    _callback: EventCallback,
+  ) {
+    throw new Error("Method is not supported in SQS mode.");
   }
 }

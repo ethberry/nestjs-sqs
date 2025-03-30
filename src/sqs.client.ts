@@ -1,6 +1,6 @@
 import { Logger } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
 import type { PacketId, ReadPacket, WritePacket } from "@nestjs/microservices";
+import { ClientProxy } from "@nestjs/microservices";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { Producer } from "sqs-producer";
 import { Consumer } from "sqs-consumer";
@@ -108,5 +108,14 @@ export class SqsClient extends ClientProxy {
 
   protected initializeDeserializer(options: ISqsClientOptions["options"]): void {
     this.deserializer = options?.deserializer ?? new SqsDeserializer();
+  }
+
+  unwrap<T>(): T {
+    if (!this.consumer) {
+      throw new Error(
+        'Not initialized. Please call the "listen"/"startAllMicroservices" method before accessing the server.',
+      );
+    }
+    return [this.consumer, this.producer] as T;
   }
 }

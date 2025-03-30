@@ -1,7 +1,7 @@
 {
   "author": {
-    "email": "trejgun+opensource@gmail.com",
-    "name": "TrejGun",
+    "email": "oleg@ethberry.io",
+    "name": "Oleg Gun",
     "url": "https://ethberry.io/"
   },
   "bugs": {
@@ -60,5 +60,5 @@
     "test": "jest --detectOpenHandles --runInBand --forceExit"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.2"
+  "version": "6.0.0"
 }
