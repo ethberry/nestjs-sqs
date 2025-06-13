@@ -10,7 +10,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "3.828.0",
     "sqs-consumer": "11.6.0",
-    "sqs-producer": "6.0.1",
+    "sqs-producer": "7.0.0",
     "uuid": "11.1.0"
   },
   "description": "",
