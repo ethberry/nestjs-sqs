@@ -8,7 +8,7 @@
     "url": "https://github.com/ethberry/nestjs-sqs/issues"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "3.839.0",
+    "@aws-sdk/client-sqs": "3.840.0",
     "sqs-consumer": "12.0.0",
     "sqs-producer": "7.0.0",
     "uuid": "11.1.0"
@@ -25,7 +25,7 @@
     "@types/jest": "30.0.0",
     "@types/uuid": "10.0.0",
     "husky": "9.1.7",
-    "jest": "30.0.3",
+    "jest": "30.0.4",
     "lint-staged": "16.1.2",
     "prettier": "3.6.2",
     "reflect-metadata": "0.2.2",
