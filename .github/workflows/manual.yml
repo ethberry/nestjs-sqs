@@ -6,11 +6,6 @@ jobs:
   user-publish:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       # BEGIN INSTALL
       - uses: actions/checkout@v4
@@ -18,8 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24.x
-          registry-url: https://npm.pkg.github.com
-          scope: "@ethberry"
 
       - name: Install Packages npm i
         run: npm i

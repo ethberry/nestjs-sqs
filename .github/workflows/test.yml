@@ -12,11 +12,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         node-version: [24.x]
@@ -47,8 +42,6 @@ jobs:
         name: Use Node.js ${{ matrix.node-version }}
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: https://npm.pkg.github.com
-          scope: "@ethberry"
       - name: npm install
         run: npm i
       - name: check lint
