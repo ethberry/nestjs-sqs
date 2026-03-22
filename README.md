@@ -9,7 +9,7 @@ This library internally relies on [bbc/sqs-producer](https://github.com/bbc/sqs-
 and [bbc/sqs-consumer](https://github.com/bbc/sqs-consumer), and implements some more useful features on top of the
 basic functionality given by them.
 
-The default **`SqsSimpleSerializer`** and **`SqsDeserializer`** work for standard queues. Message **bodies** are the same JSON for FIFO; FIFO metadata is on the SQS message, not in `Body`, so only the **serializer** changes for FIFO: register **`SqsFifoSerializer`** via the `serializer` option on `SqsClient` / `SqsServer` when needed (all are exported from this package).
+The default **`SqsSerializer`** and **`SqsDeserializer`** work for standard queues. Message **bodies** are the same JSON for FIFO; FIFO metadata is on the SQS message, not in `Body`, so only the **serializer** changes for FIFO: register **`SqsFifoSerializer`** via the `serializer` option on `SqsClient` / `SqsServer` when needed (all are exported from this package).
 
 ## Requirements
 

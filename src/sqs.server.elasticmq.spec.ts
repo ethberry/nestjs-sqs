@@ -121,6 +121,7 @@ describe("SqsServer (standard queues, ElasticMQ)", () => {
           sqs,
           region: AWS_REGION,
           queueUrl: consumerUrl,
+          suppressFifoWarning: true,
         },
         producerOptions: {
           sqs,
@@ -304,6 +305,7 @@ describe("SqsServer (FIFO queues, ElasticMQ)", () => {
           sqs,
           region: AWS_REGION,
           queueUrl: consumerUrl,
+          suppressFifoWarning: true,
         },
         producerOptions: {
           sqs,

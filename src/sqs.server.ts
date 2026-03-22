@@ -7,7 +7,7 @@ import { Producer } from "sqs-producer";
 import type { Message } from "@aws-sdk/client-sqs";
 
 import type { ISqsServerOptions } from "./interfaces";
-import { SqsSimpleSerializer } from "./serializers";
+import { SqsSerializer } from "./serializers";
 import { SqsDeserializer } from "./deserializers";
 
 @Injectable()
@@ -84,7 +84,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
   }
 
   protected initializeSerializer(options: ISqsServerOptions["options"]): void {
-    this.serializer = options?.serializer ?? new SqsSimpleSerializer();
+    this.serializer = options?.serializer ?? new SqsSerializer();
   }
 
   protected initializeDeserializer(options: ISqsServerOptions["options"]): void {

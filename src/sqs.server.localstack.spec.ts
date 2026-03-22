@@ -171,6 +171,7 @@ describe("SqsServer (standard queues, LocalStack)", () => {
           sqs,
           region: AWS_REGION,
           queueUrl: consumerUrl,
+          suppressFifoWarning: true,
         },
         producerOptions: {
           sqs,
@@ -357,6 +358,7 @@ describe("SqsServer (FIFO queues, LocalStack)", () => {
           sqs,
           region: AWS_REGION,
           queueUrl: consumerUrl,
+          suppressFifoWarning: true,
         },
         producerOptions: {
           sqs,

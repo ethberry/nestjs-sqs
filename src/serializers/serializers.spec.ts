@@ -1,13 +1,13 @@
 import type { ReadPacket } from "@nestjs/microservices";
 
 import { SqsFifoSerializer } from "./sqs-fifo.serializer";
-import { SqsSimpleSerializer } from "./sqs-simple.serializer";
+import { SqsSerializer } from "./sqs.serializer";
 
-describe("SqsSimpleSerializer", () => {
+describe("SqsSerializer", () => {
   const packet = { pattern: "EVENT", data: { n: 1 } } as unknown as ReadPacket;
 
   it("serializes without FIFO-only fields", () => {
-    const serializer = new SqsSimpleSerializer();
+    const serializer = new SqsSerializer();
     const message = serializer.serialize(packet);
 
     expect(message).toMatchObject({

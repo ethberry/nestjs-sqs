@@ -8,7 +8,7 @@ import type { Message } from "@aws-sdk/client-sqs";
 
 import { ISqsClientOptions } from "./interfaces";
 import { SqsDeserializer } from "./deserializers";
-import { SqsSimpleSerializer } from "./serializers";
+import { SqsSerializer } from "./serializers";
 
 export class SqsClient extends ClientProxy {
   private producer: Producer;
@@ -103,7 +103,7 @@ export class SqsClient extends ClientProxy {
   }
 
   protected initializeSerializer(options: ISqsClientOptions["options"]): void {
-    this.serializer = options?.serializer ?? new SqsSimpleSerializer();
+    this.serializer = options?.serializer ?? new SqsSerializer();
   }
 
   protected initializeDeserializer(options: ISqsClientOptions["options"]): void {
