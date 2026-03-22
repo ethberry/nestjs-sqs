@@ -75,7 +75,7 @@ export class SqsClient extends ClientProxy {
     return Promise.resolve();
   }
 
-  public async handleMessage(message: Message): Promise<void> {
+  public async handleMessage(message: Message): Promise<Message | undefined> {
     const { id, response, err, status, isDisposed } = await this.deserializer.deserialize(message);
     const callback = this.routingMap.get(id) as ((packet: WritePacket) => void) | undefined;
 
@@ -89,6 +89,7 @@ export class SqsClient extends ClientProxy {
       status,
       isDisposed,
     });
+    return message;
   }
 
   public close(): void {

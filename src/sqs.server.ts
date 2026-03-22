@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import type { CustomTransportStrategy, IncomingRequest } from "@nestjs/microservices";
 import { Server } from "@nestjs/microservices";
 import { NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
+import { defer, EMPTY, from, lastValueFrom } from "rxjs";
+import { catchError, concatMap, concatWith, defaultIfEmpty, last, mergeMap } from "rxjs/operators";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
 import type { Message } from "@aws-sdk/client-sqs";
@@ -54,7 +56,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     callback();
   }
 
-  public async handleMessage(message: Message): Promise<void> {
+  public async handleMessage(message: Message): Promise<Message | undefined> {
     const { pattern, data, id } = (await this.deserializer.deserialize(message)) as IncomingRequest;
 
     const handler = this.getHandlerByPattern(pattern);
@@ -66,17 +68,50 @@ export class SqsServer extends Server implements CustomTransportStrategy {
         err: NO_MESSAGE_HANDLER,
       });
       await this.producer.send(serializedPacket);
-      return;
+      return message;
     }
 
     const response$ = this.transformToObservable(await handler(data));
-    this.send(response$, paket => {
-      const serializedPacket = this.serializer.serialize({
-        id,
-        ...paket,
-      });
-      return this.producer.send(serializedPacket);
-    });
+
+    const pipeline = response$.pipe(
+      concatMap(async response => {
+        await this.producer.send(
+          this.serializer.serialize({
+            id,
+            response,
+          }),
+        );
+      }),
+      catchError(err =>
+        defer(() =>
+          from(
+            this.producer.send(
+              this.serializer.serialize({
+                id,
+                err,
+              }),
+            ),
+          ).pipe(mergeMap(() => EMPTY)),
+        ),
+      ),
+      concatWith(
+        defer(() =>
+          from(
+            this.producer.send(
+              this.serializer.serialize({
+                id,
+                isDisposed: true,
+              }),
+            ),
+          ),
+        ),
+      ),
+      defaultIfEmpty(undefined),
+      last(),
+    );
+
+    await lastValueFrom(pipeline);
+    return message;
   }
 
   public close(): void {
