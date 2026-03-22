@@ -38,7 +38,7 @@ jobs:
       #     args: docker restart elasticmq
       - name: Start ElasticMQ container with custom config
         run: docker run -d -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq softwaremill/elasticmq
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         name: Use Node.js ${{ matrix.node-version }}
         with:
           node-version: ${{ matrix.node-version }}
