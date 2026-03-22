@@ -46,21 +46,25 @@
     "@nestjs/microservices": "^11.0.0",
     "rxjs": "^7.0.0"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ethberry/nestjs-sqs.git"
   },
   "scripts": {
+    "build": "tsc",
     "docker:sqs:down": "docker compose down",
     "docker:sqs:up": "docker compose up -d",
-    "build": "tsc",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist/",
     "prepare": "husky",
     "prettier": "prettier . --write",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit",
-    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]unit[.]spec[.]ts$\"",
-    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]integration[.]spec[.]ts$\""
+    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]integration[.]spec[.]ts$\"",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]unit[.]spec[.]ts$\""
   },
   "types": "./dist/index.d.ts",
   "version": "7.0.0"
