@@ -1,9 +1,11 @@
-import type { ReadPacket, Serializer } from "@nestjs/microservices";
-import { v4 } from "uuid";
+import { randomUUID } from "node:crypto";
 
-export class SqsSerializer implements Serializer {
+import type { ReadPacket, Serializer } from "@nestjs/microservices";
+
+/** Serializer for FIFO queues (`MessageGroupId` / `MessageDeduplicationId` required by SQS). */
+export class SqsFifoSerializer implements Serializer {
   serialize(value: ReadPacket): any {
-    const id = v4();
+    const id = randomUUID();
     return {
       id,
       body: JSON.stringify(value),

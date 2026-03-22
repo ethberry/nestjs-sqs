@@ -10,6 +10,10 @@ jobs:
       # BEGIN INSTALL
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
       - name: Install Packages npm i
         run: npm i
 

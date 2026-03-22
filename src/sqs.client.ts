@@ -7,8 +7,8 @@ import { Consumer } from "sqs-consumer";
 import type { Message } from "@aws-sdk/client-sqs";
 
 import { ISqsClientOptions } from "./interfaces";
-import { SqsDeserializer } from "./sqs.deserializer";
-import { SqsSerializer } from "./sqs.serializer";
+import { SqsDeserializer } from "./deserializers";
+import { SqsSimpleSerializer } from "./serializers";
 
 export class SqsClient extends ClientProxy {
   private producer: Producer;
@@ -77,7 +77,7 @@ export class SqsClient extends ClientProxy {
 
   public async handleMessage(message: Message): Promise<void> {
     const { id, response, err, status, isDisposed } = await this.deserializer.deserialize(message);
-    const callback = this.routingMap.get(id);
+    const callback = this.routingMap.get(id) as ((packet: WritePacket) => void) | undefined;
 
     if (!callback) {
       return undefined;
@@ -103,7 +103,7 @@ export class SqsClient extends ClientProxy {
   }
 
   protected initializeSerializer(options: ISqsClientOptions["options"]): void {
-    this.serializer = options?.serializer ?? new SqsSerializer();
+    this.serializer = options?.serializer ?? new SqsSimpleSerializer();
   }
 
   protected initializeDeserializer(options: ISqsClientOptions["options"]): void {

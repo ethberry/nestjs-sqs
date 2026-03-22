@@ -14,11 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
-    # services:
-    #   elasticmq:
-    #     image: softwaremill/elasticmq
-    #     options: -p 9324:9324 -v /tmp/elasticmq:/opt/elasticmq --name elasticmq
+        node-version: [24.x]
+    services:
+      localstack:
+        image: localstack/localstack:3
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: sqs
+          DEBUG: "0"
+        options: >-
+          --health-cmd "curl -sf http://localhost:4566/_localstack/health | grep -qE 'sqs.*(running|available)'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 36
     steps:
       - uses: actions/checkout@v4
         name: Checkout code
@@ -38,6 +47,4 @@ jobs:
       - name: check lint
         run: npm run lint
       - name: npm test
-        env:
-          SQS_ENDPOINT: http://localhost:9324
         run: npm run test
