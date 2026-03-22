@@ -41,9 +41,9 @@
   "main": "./dist/index.js",
   "name": "@ethberry/nestjs-sqs",
   "peerDependencies": {
-    "@nestjs/common": "^10.0.0 || ^11.0.0",
-    "@nestjs/core": "^10.0.0 || ^11.0.0",
-    "@nestjs/microservices": "^10.0.0 || ^11.0.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/microservices": "^11.0.0",
     "rxjs": "^7.0.0"
   },
   "repository": {

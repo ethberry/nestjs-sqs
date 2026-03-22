@@ -11,6 +11,20 @@ basic functionality given by them.
 
 The default **`SqsSerializer`** and **`SqsDeserializer`** work for standard queues. Message **bodies** are the same JSON for FIFO; FIFO metadata is on the SQS message, not in `Body`, so only the **serializer** changes for FIFO: register **`SqsFifoSerializer`** via the `serializer` option on `SqsClient` / `SqsServer` when needed (all are exported from this package).
 
+## Compared to Redis and RabbitMQ transports
+
+Nest’s **Redis** and **RMQ** servers are first-party: multiplexed connections, push-style delivery, and rich metadata on the broker record. **SQS** is different by design:
+
+| Topic | Redis / RMQ (typical) | This SQS transport |
+|--------|------------------------|---------------------|
+| Delivery | Often push / subscription | **Long polling** (`sqs-consumer`) |
+| Semantics | Depends on broker | **At-least-once**; duplicates possible |
+| Request–reply | Channels / reply-to | **Two queues** + correlation **`id`** in the JSON body |
+| Ordering | Broker-specific | **Standard** = best-effort; **FIFO** = per message group (see AWS docs) |
+| Metadata | Headers / properties | **`Body`** holds the Nest packet by default; use **`SqsContext`** for raw `Message` (attributes, receipt handle, etc.) |
+
+The Nest **API** stays familiar: `@MessagePattern` / `@EventPattern`, `ClientProxy`, and serializers—but **operational behavior** follows SQS (visibility timeout, DLQ, throttling). Plan retries and idempotency accordingly.
+
 ## Requirements
 
 - **Node.js 24+** (will run on 22, but not tested)
@@ -92,6 +106,46 @@ export class SqsController {
   }
 }
 ```
+
+### Handler context (`SqsContext`)
+
+Like **`RmqContext`** or **`RedisContext`**, you can inject **`SqsContext`** with `@Ctx()` to read the raw AWS **`Message`**, the consumer **queue URL**, and the **pattern** string. The first argument remains the deserialized **payload** (`data` from the body).
+
+```ts
+import { Controller } from "@nestjs/common";
+import { Ctx, MessagePattern, Payload } from "@nestjs/microservices";
+import { SqsContext } from "@ethberry/nestjs-sqs";
+
+@Controller()
+export class SqsController {
+  @MessagePattern(MESSAGE_TYPE)
+  public handleRpc(@Payload() data: unknown, @Ctx() ctx: SqsContext): Promise<unknown> {
+    const sqs = ctx.getMessage();
+    const attrs = sqs.MessageAttributes;
+    // ...
+    return { ok: true };
+  }
+}
+```
+
+Events emitted without a top-level **`id`** in the packet are routed with **`@EventPattern`** (same idea as other Nest transports).
+
+### Graceful shutdown
+
+[`sqs-consumer`](https://github.com/bbc/sqs-consumer) can wait for the last poll and in-flight **`handleMessage`** work before stopping. Set **`pollingCompleteWaitTimeMs`** on **`consumerOptions`** (milliseconds you are willing to wait). **`SqsServer.close()`** forwards optional **`StopOptions`** to **`consumer.stop()`** (for example `{ abort: true }` to cancel in-flight polls—use sparingly).
+
+```ts
+new SqsServer({
+  consumerOptions: {
+    sqs,
+    queueUrl: "...",
+    pollingCompleteWaitTimeMs: 10_000,
+  },
+  producerOptions: { sqs, queueUrl: "..." },
+});
+```
+
+When the app stops, call **`app.close()`** (or otherwise invoke the microservice **`close`**) so the consumer shuts down.
 
 ### Produce messages
 
