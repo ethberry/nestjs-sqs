@@ -58,7 +58,9 @@
     "prebuild": "rimraf dist/",
     "prepare": "husky",
     "prettier": "prettier . --write",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]unit[.]spec[.]ts$\"",
+    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]integration[.]spec[.]ts$\""
   },
   "types": "./dist/index.d.ts",
   "version": "7.0.0"

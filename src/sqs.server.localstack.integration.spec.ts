@@ -64,7 +64,7 @@ function buildInboundSendParams(queueUrl: string, pattern: unknown, data: unknow
 
 async function drainQueue(client: SQSClient, queueUrl: string): Promise<void> {
   // FIFO (LocalStack): short polls often return no messages while the queue is non-empty, so tests must long-poll to drain.
-  const waitTimeSeconds = queueUrl.endsWith(".fifo") ? 2 : 0;
+  const waitTimeSeconds = queueUrl.endsWith(".fifo") ? 5 : 0;
   for (let round = 0; round < 100; round++) {
     const out = await client.send(
       new ReceiveMessageCommand({

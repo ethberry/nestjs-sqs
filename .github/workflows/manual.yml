@@ -6,6 +6,8 @@ jobs:
   user-publish:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    env:
+      HUSKY: "0"
     steps:
       # BEGIN INSTALL
       - uses: actions/checkout@v6
