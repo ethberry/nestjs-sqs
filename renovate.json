@@ -1,5 +1,5 @@
 {
-  "baseBranches": ["master"],
+  "baseBranchPatterns": ["master"],
   "extends": ["github>ethberry/renovate-config"],
   "packageRules": [
     {
