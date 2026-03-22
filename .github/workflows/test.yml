@@ -29,7 +29,7 @@ jobs:
           --health-timeout 5s
           --health-retries 36
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         name: Checkout code
       - run: sudo cp ${{ github.workspace }}/elasticmq.conf /tmp/elasticmq.conf
       # - name: Restart elasticmq
