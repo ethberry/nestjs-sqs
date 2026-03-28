@@ -1,4 +1,6 @@
+# Publishes with Node.js 24.x
 name: Manual release Publish
+
 on:
   workflow_dispatch:
 
@@ -9,12 +11,12 @@ jobs:
     env:
       HUSKY: "0"
     steps:
-      # BEGIN INSTALL
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v6
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
         with:
-          node-version: 24.x
+          node-version: "24.x"
 
       - name: Install Packages npm i
         run: npm i

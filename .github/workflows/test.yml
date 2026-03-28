@@ -1,3 +1,4 @@
+# CI runs on Node.js 24.x
 name: CI Test
 
 on:
@@ -8,13 +9,15 @@ on:
   pull_request:
     branches:
       - master
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [24.x]
     services:
       localstack:
         image: localstack/localstack:4
@@ -28,23 +31,27 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 36
+
     steps:
-      - uses: actions/checkout@v6
-        name: Checkout code
-      - run: sudo cp ${{ github.workspace }}/elasticmq.conf /tmp/elasticmq.conf
-      # - name: Restart elasticmq
-      #   uses: docker://docker
-      #   with:
-      #     args: docker restart elasticmq
-      - name: Start ElasticMQ container with custom config
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Copy ElasticMQ config
+        run: sudo cp ${{ github.workspace }}/elasticmq.conf /tmp/elasticmq.conf
+
+      - name: Start ElasticMQ
         run: docker run -d -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq softwaremill/elasticmq
-      - uses: actions/setup-node@v6
-        name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install
+          node-version: "24.x"
+
+      - name: Install Packages
         run: npm i
-      - name: check lint
+
+      - name: Lint
         run: npm run lint
-      - name: npm test
+
+      - name: Run tests
         run: npm run test
