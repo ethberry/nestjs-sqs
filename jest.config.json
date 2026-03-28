@@ -1,10 +1,10 @@
 {
-  "testTimeout": 60000,
   "collectCoverage": true,
   "coverageDirectory": "../coverage",
   "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
   "preset": "ts-jest",
   "rootDir": "src",
   "testMatch": ["**/*.unit.spec.ts", "**/*.integration.spec.ts"],
+  "testTimeout": 60000,
   "verbose": true
 }
