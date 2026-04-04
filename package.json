@@ -15,7 +15,7 @@
   "description": "",
   "devDependencies": {
     "@ethberry/cross-env": "0.0.5",
-    "@ethberry/eslint-config": "5.0.9",
+    "@ethberry/eslint-config": "5.0.11",
     "@nestjs/common": "11.1.17",
     "@nestjs/config": "4.0.3",
     "@nestjs/core": "11.1.17",
