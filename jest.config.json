@@ -2,9 +2,21 @@
   "collectCoverage": true,
   "coverageDirectory": "../coverage",
   "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
-  "preset": "ts-jest",
+  "moduleNameMapper": {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
+  "preset": "ts-jest/presets/default-esm",
   "rootDir": "src",
+  "testEnvironment": "node",
   "testMatch": ["**/*.unit.spec.ts", "**/*.integration.spec.ts"],
   "testTimeout": 60000,
+  "transform": {
+    "^.+\\.[tj]sx?$": [
+      "ts-jest",
+      {
+        "useESM": true
+      }
+    ]
+  },
   "verbose": true
 }

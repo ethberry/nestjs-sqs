@@ -36,6 +36,13 @@
   "engines": {
     "node": ">=24"
   },
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "keywords": [],
   "license": "MIT",
   "main": "./dist/index.js",
@@ -66,6 +73,7 @@
     "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]integration[.]spec[.]ts$\"",
     "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --runInBand --forceExit --testPathPatterns \"[.]unit[.]spec[.]ts$\""
   },
+  "type": "module",
   "types": "./dist/index.d.ts",
   "version": "7.0.0"
 }
