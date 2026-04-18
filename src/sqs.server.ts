@@ -4,7 +4,7 @@ import type { ConsumerDeserializer, CustomTransportStrategy } from "@nestjs/micr
 import { Server } from "@nestjs/microservices";
 import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
 import { defer, EMPTY, from, lastValueFrom } from "rxjs";
-import { catchError, concatMap, concatWith, defaultIfEmpty, last, mergeMap } from "rxjs/operators";
+import { catchError, defaultIfEmpty, last, mergeMap } from "rxjs/operators";
 import type { StopOptions } from "sqs-consumer";
 import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
@@ -114,12 +114,20 @@ export class SqsServer extends Server implements CustomTransportStrategy {
     await (this.onProcessingStartHook(this.transportId!, sqsContext, async () => {
       const response$ = this.transformToObservable(await handler(data, sqsContext));
 
+      // One SQS reply per RPC: Nest ClientProxy must get `response` and `isDisposed` in the same
+      // callback (see createObserver in @nestjs/microservices). Sending two messages (response,
+      // then dispose) breaks on standard queues (no ordering) and can emit dispose-only → EmptyError.
+      // `undefined` becomes `null` so `response !== undefined` in Nest and the client gets one `next`.
       const pipeline = response$.pipe(
-        concatMap(async response => {
+        defaultIfEmpty(undefined),
+        last(),
+        mergeMap(async response => {
+          const resolved = response === undefined ? null : response;
           await this.sendProducerMessage(
             this.serializer.serialize({
               id,
-              response,
+              isDisposed: true,
+              response: resolved,
             }) as IProducerWireMessage,
           );
         }),
@@ -135,20 +143,6 @@ export class SqsServer extends Server implements CustomTransportStrategy {
             ).pipe(mergeMap(() => EMPTY)),
           ),
         ),
-        concatWith(
-          defer(() =>
-            from(
-              this.sendProducerMessage(
-                this.serializer.serialize({
-                  id,
-                  isDisposed: true,
-                }) as IProducerWireMessage,
-              ),
-            ),
-          ),
-        ),
-        defaultIfEmpty(undefined),
-        last(),
       );
 
       await lastValueFrom(pipeline);
