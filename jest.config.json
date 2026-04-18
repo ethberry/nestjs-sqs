@@ -5,7 +5,7 @@
   "moduleNameMapper": {
     "^(\\.{1,2}/.*)\\.js$": "$1"
   },
-  "preset": "ts-jest/presets/default-esm",
+  "preset": "ts-jest",
   "rootDir": "src",
   "testEnvironment": "node",
   "testMatch": ["**/*.unit.spec.ts", "**/*.integration.spec.ts"],
@@ -14,7 +14,7 @@
     "^.+\\.[tj]sx?$": [
       "ts-jest",
       {
-        "useESM": true
+        "tsconfig": "<rootDir>/../tsconfig.spec.json"
       }
     ]
   },
