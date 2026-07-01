@@ -48,7 +48,7 @@ jobs:
           node-version: "24.x"
 
       - name: Install Packages
-        run: npm i
+        run: npm ci
 
       - name: Lint
         run: npm run lint

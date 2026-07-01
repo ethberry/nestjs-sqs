@@ -18,8 +18,8 @@ jobs:
         with:
           node-version: "24.x"
 
-      - name: Install Packages npm i
-        run: npm i
+      - name: Install Packages npm ci
+        run: npm ci
 
       - name: Build Packages
         run: npm run build
