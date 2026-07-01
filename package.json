@@ -10,7 +10,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "3.1075.0",
     "sqs-consumer": "15.0.2",
-    "sqs-producer": "8.0.9"
+    "sqs-producer": "9.0.5"
   },
   "description": "",
   "devDependencies": {
