@@ -52,9 +52,7 @@ jobs:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
 
       - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: ./.npmrc
+        run: rm -f ./.npmrc
 
       - name: Authenticate NPM Registry & Configure Git User
         run: |
