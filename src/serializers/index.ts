@@ -1,2 +1,2 @@
-export * from "./sqs.serializer";
-export * from "./sqs-fifo.serializer";
+export * from "./sqs.serializer.js";
+export * from "./sqs-fifo.serializer.js";

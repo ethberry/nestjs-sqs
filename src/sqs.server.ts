@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { isString } from "@nestjs/common/utils/shared.utils";
+import { isString } from "@nestjs/common/utils/shared.utils.js";
 import type { ConsumerDeserializer, CustomTransportStrategy } from "@nestjs/microservices";
 import { Server } from "@nestjs/microservices";
-import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants";
+import { NO_EVENT_HANDLER, NO_MESSAGE_HANDLER } from "@nestjs/microservices/constants.js";
 import { defer, EMPTY, from, lastValueFrom } from "rxjs";
 import { catchError, defaultIfEmpty, last, mergeMap } from "rxjs/operators";
 import type { StopOptions } from "sqs-consumer";
@@ -10,11 +10,11 @@ import { Consumer } from "sqs-consumer";
 import { Producer } from "sqs-producer";
 import type { Message } from "@aws-sdk/client-sqs";
 
-import type { ISqsServerOptions } from "./interfaces";
-import { SqsSerializer } from "./serializers";
-import { SqsDeserializer } from "./deserializers";
-import { isSqsServerRpcPacket } from "./types/sqs-packets";
-import { SqsContext } from "./sqs.context";
+import type { ISqsServerOptions } from "./interfaces/index.js";
+import { SqsSerializer } from "./serializers/index.js";
+import { SqsDeserializer } from "./deserializers/index.js";
+import { isSqsServerRpcPacket } from "./types/sqs-packets.js";
+import { SqsContext } from "./sqs.context.js";
 
 /** Wire shape from {@link SqsSerializer} / {@link SqsFifoSerializer} before SQS send. */
 interface IProducerWireMessage {

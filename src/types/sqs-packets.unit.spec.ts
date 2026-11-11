@@ -1,4 +1,4 @@
-import { isSqsServerRpcPacket, assertSqsMessageBody } from "./sqs-packets";
+import { isSqsServerRpcPacket, assertSqsMessageBody } from "./sqs-packets.js";
 
 describe("sqs-packets", () => {
   describe("isSqsServerRpcPacket", () => {

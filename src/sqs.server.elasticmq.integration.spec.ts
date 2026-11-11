@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { randomUUID } from "node:crypto";
 
 import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
@@ -7,10 +8,10 @@ import { ClientProxy, ClientsModule, Ctx, MessagePattern, Payload } from "@nestj
 import { DeleteMessageBatchCommand, ReceiveMessageCommand, SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { firstValueFrom } from "rxjs";
 
-import { SqsFifoSerializer } from "./serializers";
-import { SqsServer } from "./sqs.server";
-import { SqsClient } from "./sqs.client";
-import { SqsContext } from "./sqs.context";
+import { SqsFifoSerializer } from "./serializers/index.js";
+import { SqsServer } from "./sqs.server.js";
+import { SqsClient } from "./sqs.client.js";
+import { SqsContext } from "./sqs.context.js";
 
 const AWS_REGION = "elasticmq";
 const INTEGRATION_ASYNC_MS = 15_000;
@@ -77,7 +78,7 @@ async function drainQueue(client: SQSClient, queueUrl: string): Promise<void> {
   }
 }
 
-async function waitForSpyCalls(spy: jest.SpyInstance, count: number, timeoutMs: number): Promise<void> {
+async function waitForSpyCalls(spy: jest.Spied<any>, count: number, timeoutMs: number): Promise<void> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (spy.mock.calls.length >= count) {
@@ -235,7 +236,7 @@ describe("SqsServer (standard queues, ElasticMQ)", () => {
   });
 
   describe("SqsService (ElasticMQ, standard)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(() => {
       logSpy = jest.spyOn(sqsService, "receive");
@@ -411,7 +412,7 @@ describe("SqsServer (FIFO queues, ElasticMQ)", () => {
   });
 
   describe("SqsService (ElasticMQ, FIFO)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(async () => {
       await drainQueue(sqs, consumerUrl);

@@ -3,7 +3,7 @@ import type { ClientProxy, Deserializer, Serializer } from "@nestjs/microservice
 import type { Message } from "@aws-sdk/client-sqs";
 import { SQSClient } from "@aws-sdk/client-sqs";
 
-import type { SqsClientInboundPacket } from "../types";
+import type { SqsClientInboundPacket } from "../types/index.js";
 
 export interface ISqsClientOptions {
   /** Nest `ClientProxy` implementation — `SqsClient`. */

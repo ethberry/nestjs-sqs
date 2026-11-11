@@ -1,5 +1,5 @@
-import { SqsDeserializer } from "./sqs.deserializer";
-import type { SqsClientInboundPacket } from "../types";
+import { SqsDeserializer } from "./sqs.deserializer.js";
+import type { SqsClientInboundPacket } from "../types/index.js";
 
 describe("SqsDeserializer", () => {
   it("parses server RPC packet (pattern + data + id)", () => {

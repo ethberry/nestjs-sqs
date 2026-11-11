@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { randomUUID } from "node:crypto";
 
 import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
@@ -15,10 +16,10 @@ import {
 } from "@aws-sdk/client-sqs";
 import { firstValueFrom } from "rxjs";
 
-import { SqsFifoSerializer } from "./serializers";
-import { SqsServer } from "./sqs.server";
-import { SqsClient } from "./sqs.client";
-import { SqsContext } from "./sqs.context";
+import { SqsFifoSerializer } from "./serializers/index.js";
+import { SqsServer } from "./sqs.server.js";
+import { SqsClient } from "./sqs.client.js";
+import { SqsContext } from "./sqs.context.js";
 
 const AWS_REGION = "us-east-1";
 /** Upper bound for SQS delivery + sqs-consumer to invoke the handler (per assertion). */
@@ -90,7 +91,7 @@ async function drainQueue(client: SQSClient, queueUrl: string): Promise<void> {
   }
 }
 
-async function waitForSpyCalls(spy: jest.SpyInstance, count: number, timeoutMs: number): Promise<void> {
+async function waitForSpyCalls(spy: jest.Spied<any>, count: number, timeoutMs: number): Promise<void> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (spy.mock.calls.length >= count) {
@@ -320,7 +321,7 @@ describe("SqsServer (standard queues, LocalStack)", () => {
   });
 
   describe("SqsService (LocalStack, standard)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(() => {
       logSpy = jest.spyOn(sqsService, "receive");
@@ -501,7 +502,7 @@ describe("SqsServer (FIFO queues, LocalStack)", () => {
   });
 
   describe("SqsService (LocalStack, FIFO)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(async () => {
       await drainQueue(sqs, consumerUrl);

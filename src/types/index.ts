@@ -1,1 +1,1 @@
-export * from "./sqs-packets";
+export * from "./sqs-packets.js";

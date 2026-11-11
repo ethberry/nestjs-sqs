@@ -1,1 +1,1 @@
-export * from "./sqs.deserializer";
+export * from "./sqs.deserializer.js";

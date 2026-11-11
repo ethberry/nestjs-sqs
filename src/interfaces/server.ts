@@ -4,7 +4,7 @@ import type { Message } from "@aws-sdk/client-sqs";
 import type { ConsumerOptions } from "sqs-consumer";
 import type { ProducerOptions } from "sqs-producer";
 
-import type { SqsServerInboundPacket } from "../types/sqs-packets";
+import type { SqsServerInboundPacket } from "../types/sqs-packets.js";
 
 export interface ISqsServerOptions {
   /** Nest `ClientProxy` class paired with this server (typically `SqsClient`). */
