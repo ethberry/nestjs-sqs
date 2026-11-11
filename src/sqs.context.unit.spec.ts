@@ -1,6 +1,6 @@
 import type { Message } from "@aws-sdk/client-sqs";
 
-import { SqsContext } from "./sqs.context";
+import { SqsContext } from "./sqs.context.js";
 
 describe("SqsContext", () => {
   it("exposes message, queue URL, and pattern", () => {

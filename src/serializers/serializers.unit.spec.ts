@@ -1,7 +1,7 @@
 import type { ReadPacket } from "@nestjs/microservices";
 
-import { SqsFifoSerializer } from "./sqs-fifo.serializer";
-import { SqsSerializer } from "./sqs.serializer";
+import { SqsFifoSerializer } from "./sqs-fifo.serializer.js";
+import { SqsSerializer } from "./sqs.serializer.js";
 
 describe("SqsSerializer", () => {
   const packet = { pattern: "EVENT", data: { n: 1 } } as unknown as ReadPacket;

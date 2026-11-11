@@ -1,8 +1,8 @@
 import type { Deserializer } from "@nestjs/microservices";
 import type { Message } from "@aws-sdk/client-sqs";
 
-import type { SqsClientInboundPacket, SqsServerInboundPacket } from "../types/sqs-packets";
-import { assertSqsMessageBody } from "../types/sqs-packets";
+import type { SqsClientInboundPacket, SqsServerInboundPacket } from "../types/sqs-packets.js";
+import { assertSqsMessageBody } from "../types/sqs-packets.js";
 
 export class SqsDeserializer<
   TWire extends SqsServerInboundPacket | SqsClientInboundPacket = SqsServerInboundPacket,

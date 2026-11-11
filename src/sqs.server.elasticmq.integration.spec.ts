@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { randomUUID } from "node:crypto";
 
 import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
@@ -7,10 +8,10 @@ import { ClientProxy, ClientsModule, Ctx, MessagePattern, Payload } from "@nestj
 import { DeleteMessageBatchCommand, ReceiveMessageCommand, SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { firstValueFrom } from "rxjs";
 
-import { SqsFifoSerializer } from "./serializers";
-import { SqsServer } from "./sqs.server";
-import { SqsClient } from "./sqs.client";
-import { SqsContext } from "./sqs.context";
+import { SqsFifoSerializer } from "./serializers/index.js";
+import { SqsServer } from "./sqs.server.js";
+import { SqsClient } from "./sqs.client.js";
+import { SqsContext } from "./sqs.context.js";
 
 const AWS_REGION = "elasticmq";
 const INTEGRATION_ASYNC_MS = 15_000;

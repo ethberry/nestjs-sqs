@@ -2,14 +2,14 @@ import { Logger } from "@nestjs/common";
 import type { PacketId, ProducerDeserializer, ReadPacket, WritePacket } from "@nestjs/microservices";
 import { ClientProxy } from "@nestjs/microservices";
 import type { Message } from "@aws-sdk/client-sqs";
-import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util.js";
 import { Producer } from "sqs-producer";
 import { Consumer } from "sqs-consumer";
 
-import { ISqsClientOptions } from "./interfaces";
-import { SqsDeserializer } from "./deserializers";
-import { SqsSerializer } from "./serializers";
-import type { SqsClientInboundPacket } from "./types";
+import { ISqsClientOptions } from "./interfaces/index.js";
+import { SqsDeserializer } from "./deserializers/index.js";
+import { SqsSerializer } from "./serializers/index.js";
+import type { SqsClientInboundPacket } from "./types/index.js";
 
 /** Wire shape from {@link SqsSerializer} / {@link SqsFifoSerializer} before SQS send. */
 interface IProducerWireMessage {
