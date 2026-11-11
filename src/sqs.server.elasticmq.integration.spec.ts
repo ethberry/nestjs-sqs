@@ -78,7 +78,7 @@ async function drainQueue(client: SQSClient, queueUrl: string): Promise<void> {
   }
 }
 
-async function waitForSpyCalls(spy: jest.SpyInstance, count: number, timeoutMs: number): Promise<void> {
+async function waitForSpyCalls(spy: jest.Spied<any>, count: number, timeoutMs: number): Promise<void> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (spy.mock.calls.length >= count) {
@@ -236,7 +236,7 @@ describe("SqsServer (standard queues, ElasticMQ)", () => {
   });
 
   describe("SqsService (ElasticMQ, standard)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(() => {
       logSpy = jest.spyOn(sqsService, "receive");
@@ -412,7 +412,7 @@ describe("SqsServer (FIFO queues, ElasticMQ)", () => {
   });
 
   describe("SqsService (ElasticMQ, FIFO)", () => {
-    let logSpy: jest.SpyInstance;
+    let logSpy: jest.Spied<any>;
 
     beforeEach(async () => {
       await drainQueue(sqs, consumerUrl);
