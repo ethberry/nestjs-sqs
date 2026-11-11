@@ -43,7 +43,7 @@ jobs:
         run: docker run -d -p 9324:9324 -v /tmp/elasticmq.conf:/opt/elasticmq.conf --name elasticmq softwaremill/elasticmq
 
       - name: Use Node.js 24
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "24.x"
 
