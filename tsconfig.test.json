@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["jest", "node"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.stories.ts", "**/*.stories.tsx"]
+}
