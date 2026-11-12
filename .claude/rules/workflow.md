@@ -20,7 +20,7 @@ The GitHub Actions budget of the organisation is limited and shared by all repos
 - Verify locally: run the repository's checks (build, tests, lint) on your machine and name them in the PR description with their outcome. A green local run is the gate for review.
 - Do not start workflows by hand and do not re-run them without the user's yes. Releases are batched: publish only what a consumer needs now.
 - Put `[skip ci]` into commit messages and the merge commit of changes that do not need CI (docs, agent rules, config without effect on the build).
-- Do not add CI triggers (`pull_request`, `push`) or new jobs; changing workflow triggers is the user's decision.
+- Test workflows run only by hand (`workflow_dispatch`), by the user's decision of 2026-11-12; there are no `pull_request` or `push` triggers for tests. Do not add triggers or new jobs; changing workflow triggers is the user's decision. A production deploy on push to its branch stays as it is.
 
 ## Definition of Done
 
