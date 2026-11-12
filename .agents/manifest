@@ -1,0 +1,12 @@
+# Shared and rendered files in this repository. They are removed and rewritten on every update; do not edit them.
+.claude/rules/documentation.md
+.claude/rules/jest.md
+.claude/rules/kiss-dry-yagni.md
+.claude/rules/nestjs.md
+.claude/rules/packages.md
+.claude/rules/repository-boundaries.md
+.claude/rules/testing-nest.md
+.claude/rules/testing.md
+.claude/rules/typescript.md
+.claude/rules/versions.md
+.claude/rules/workflow.md
