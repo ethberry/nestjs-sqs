@@ -2,14 +2,9 @@
 name: CI Test
 
 on:
+  # Temporary: tests run only by hand (Actions → CI Test → Run workflow) to save CI minutes, by the user's decision
+  # of 2026-11-12. Verify locally before a PR. Restoring the push / pull_request triggers is the user's decision.
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-    types: [opened, synchronize, reopened]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
