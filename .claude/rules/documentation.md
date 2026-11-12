@@ -12,7 +12,7 @@ Context ends; project knowledge must not. Anything whose loss would force someon
 | Lasting knowledge about the system | `docs/<topic>.md`, index in `docs/README.md` | yes |
 | Decisions a reader could take for a mistake | `docs/adr/NNNN-<title>.md` | yes |
 | Package usage for consumers | the package's `README.md` | yes |
-| The plan, open findings, follow-ups, session state | the workspace plan file outside the repositories, each session in its own section | no |
+| Findings outside the task's scope, follow-ups, questions for the user | the workspace plan file (`PLAN.md` in the folder that holds the repositories), each session in its own section | no |
 
 Do not create task-, plan- or status-files in `docs/`.
 
@@ -79,6 +79,17 @@ What becomes easier, harder, or must not be changed without revisiting this ADR.
 ```
 
 Before changing code that an ADR covers, read the ADR. If the change contradicts it, write a new ADR that supersedes it (set the old one's status to `superseded by NNNN`); do not edit the decision of an accepted ADR.
+
+## The plan file
+
+While working on a task you notice things that are not part of it: a bug, a security hole, a test that never runs, a wrong doc, a rule the code breaks. They are out of scope, so you do not fix them now, and they are not ignored either. Write each one down in your section of the plan file, so it is picked up later.
+
+- One item per finding: where (`repo` + `file:line`), what is wrong and what it causes, the proposed fix if you have one, and what it waits for (after the pause, another session, a decision).
+- An item you cannot judge or fix without more information or a decision goes under **Needs the user** in your section, with the question in one sentence, and you tell the user about it in your report. Do not leave it for later silently.
+- Every question you asked the user that is still unanswered also goes under **Needs the user** — whether it scrolled away, was not noticed or could not be answered yet — with the date it was asked and what waits on it. Ask it again in your next report; remove it once answered, and write the answer where it belongs (a note, an ADR, the item it unblocks).
+- Security holes and data loss are marked as such and named in the report every time until they are taken into work.
+- Remove an item when it is done or becomes a GitHub issue or PR (link it). The plan file is not a status log or a history of the session: what was merged is in git.
+- Edit only your own section. A finding for another session's area goes into your section under "for <session>", and you tell that session.
 
 ## Package READMEs
 
