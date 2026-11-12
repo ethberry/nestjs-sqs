@@ -370,3 +370,20 @@ const query = plainToInstance(GetTransactionsQueryDTO, {
   uiType: UiTransactionType.SEND,
 });
 ```
+
+## Retired libraries
+
+Not used any more; no new code, dependency or helper on them, and existing usages are migrated as their own change (a whole file or module at a time):
+
+| Retired | Instead |
+|---|---|
+| ethers | viem |
+| yup (and `@ethberry/yup-rules*`) | zod (`@ethberry/zod-rules*`) |
+| draft-js (and `@ethberry/mui-draft-js`, `mui-inputs-draft`) | Lexical (`@ethberry/mui-lexical`, `@ethberry/mui-inputs-lexical`) |
+
+An exception is allowed only where a third-party SDK requires the retired library (for example an SDK that accepts only an ethers signer); it is listed in the repository's plan file with the reason, and is not rewritten without tests.
+
+## Blockchain access: viem
+
+- Everything that talks to a chain uses viem (UIs through `@ethberry/provider-wallet` on wagmi + viem, backends and scripts through viem, Hardhat 3 tests through `hardhat-viem`). ethers is legacy: no new code on ethers, no new ethers dependency, no new helper that takes or returns ethers types.
+- Existing ethers code is migrated as its own change (a whole file or module at a time), not mixed with viem in one file and not extended in passing.
