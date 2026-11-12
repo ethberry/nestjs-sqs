@@ -9,9 +9,18 @@
 5. **Simplify** — KISS / DRY / YAGNI pass over the whole diff (`kiss-dry-yagni` rule). Re-run the affected checks.
 6. **Review** — the change is reviewed by someone who did not write it. Fix or answer every finding. Merge only after the reviewer approves.
 7. **Document** — knowledge notes, ADRs, `AGENTS.md` and package READMEs (`documentation` rule).
-8. **Report** — what changed, the checks run with their outcome, what is left, open questions. Follow-ups go to the plan file, not into code.
+8. **Report** — what changed, the checks run with their outcome, what is left, and every question to the user that is still unanswered (from your "Needs the user" in the plan file, asked again). Follow-ups go to the plan file, not into code.
 
-Problems noticed outside the task's scope are not fixed silently and not dropped: report them and add them to the plan file.
+Problems noticed outside the task's scope are not fixed silently and not dropped: report them and add them to the plan file. A question to the user is not dropped either when it stays unanswered (missed, scrolled away, cannot be answered yet): it goes under "Needs the user" in the plan file with its date and is asked again (`documentation` rule, "The plan file").
+
+## CI minutes
+
+The GitHub Actions budget of the organisation is limited and shared by all repositories; package publishing alone takes most of it. Until the user says otherwise:
+
+- Verify locally: run the repository's checks (build, tests, lint) on your machine and name them in the PR description with their outcome. A green local run is the gate for review.
+- Do not start workflows by hand and do not re-run them without the user's yes. Releases are batched: publish only what a consumer needs now.
+- Put `[skip ci]` into commit messages and the merge commit of changes that do not need CI (docs, agent rules, config without effect on the build).
+- Do not add CI triggers (`pull_request`, `push`) or new jobs; changing workflow triggers is the user's decision.
 
 ## Definition of Done
 
