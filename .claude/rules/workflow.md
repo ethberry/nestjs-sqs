@@ -40,5 +40,7 @@ Keep three statements apart: **test written**, **test run**, **test passed**. "V
 - Never write code on the base branch or on someone else's branch. Check `git branch --show-current` right before every commit and push; if it is not the task's branch, stop.
 - Commit messages follow conventional commits (`fix:`, `feat:`, `feat!:` / `BREAKING CHANGE:` for a major, `chore:`, `docs:`, `test:`), one logical change per commit.
 - A pull request targets the base branch. Its description says what changes and why, how it was verified (commands and results), and what is not verified.
-- Do not force-push shared branches, do not rewrite pushed history, do not delete branches or tags without the user's yes.
+- Do not force-push shared branches and do not rewrite pushed history. Tags are not deleted without the user's yes.
+- Pull requests are merged with **squash** (one commit per PR on the base branch).
+- After a merge, delete the task branch on GitHub and locally. A squash-merged branch is not an ancestor of the base branch, so `git branch -d` and "is it merged?" checks by commits say no: check by the pull request instead (`gh pr list --state merged --head <branch>`), then `git push origin --delete <branch>` and `git branch -D <branch>`. A branch with unmerged work that is still wanted stays.
 - Uncommitted changes of another session in a shared checkout are not yours: do not stash, reset or commit them.
