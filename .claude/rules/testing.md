@@ -10,4 +10,5 @@
 - Focused tests are forbidden in every runner: `forbidOnly: true` for mocha and Playwright, `jest/no-focused-tests` as an error or `--ci` for jest. A forgotten `.only` in a shared behaviour silently drops every other test of its consumers.
 - When a change touches test infrastructure, dependencies or shared behaviours, compare the number of tests per package before and after; a drop is a failure until explained.
 - Do not weaken a check to get green: no skipped tests, raised timeouts, broader matchers or mocked-out code under test. A test that cannot run in CI is reported, not deleted.
+- A change to build configuration (`tsconfig*`, webpack / bundler config, `package.json` exports or scripts) is verified with the production build of every app and package it affects, not only with type checks or a dev server. Name the builds in the report.
 - Published code is tested as it is published when the packaging matters (for example `require()` and `import` of the built `dist` in a separate process).

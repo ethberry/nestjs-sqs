@@ -82,6 +82,8 @@ Before changing code that an ADR covers, read the ADR. If the change contradicts
 
 ## The plan file
 
+Write the item into the plan file in the same turn you notice it, before you answer. Mentioning it in the reply, telling another session or adding a rule is not a record: only the plan file is. A mistake of your own (a missed review finding, a wrong claim, a broken build you let through) is recorded the same way.
+
 While working on a task you notice things that are not part of it: a bug, a security hole, a test that never runs, a wrong doc, a rule the code breaks. They are out of scope, so you do not fix them now, and they are not ignored either. Write each one down in your section of the plan file, so it is picked up later.
 
 - One item per finding: where (`repo` + `file:line`), what is wrong and what it causes, the proposed fix if you have one, and what it waits for (after the pause, another session, a decision).
