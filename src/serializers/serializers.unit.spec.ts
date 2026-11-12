@@ -4,7 +4,7 @@ import { SqsFifoSerializer } from "./sqs-fifo.serializer.js";
 import { SqsSerializer } from "./sqs.serializer.js";
 
 describe("SqsSerializer", () => {
-  const packet = { pattern: "EVENT", data: { n: 1 } } as unknown as ReadPacket;
+  const packet: ReadPacket<{ n: number }> = { pattern: "EVENT", data: { n: 1 } };
 
   it("serializes without FIFO-only fields", () => {
     const serializer = new SqsSerializer();
@@ -21,11 +21,11 @@ describe("SqsSerializer", () => {
 });
 
 describe("SqsFifoSerializer", () => {
-  const packet = { pattern: "EVENT", data: { n: 1 } } as unknown as ReadPacket;
+  const packet: ReadPacket<{ n: number }> = { pattern: "EVENT", data: { n: 1 } };
 
   it("serializes with groupId and deduplicationId", () => {
     const serializer = new SqsFifoSerializer();
-    const message = serializer.serialize(packet) as { id: string; deduplicationId: string };
+    const message: { id: string } = serializer.serialize(packet);
 
     expect(message).toMatchObject({
       id: expect.any(String),
