@@ -9,10 +9,10 @@ Context ends; project knowledge must not. Anything whose loss would force someon
 | What | Where | Committed |
 |---|---|---|
 | What the project is, architecture, infrastructure, commands, gotchas, where the docs are | `AGENTS.md` (written by hand) | yes |
-| Lasting knowledge about the system | `docs/<topic>.md`, index in `docs/README.md` | yes |
+| Lasting knowledge about the system; how every feature works, one feature per file | `docs/<topic>.md`, `docs/<feature>.md`, index in `docs/README.md` | yes |
 | Decisions a reader could take for a mistake | `docs/adr/NNNN-<title>.md` | yes |
 | Package usage for consumers | the package's `README.md` | yes |
-| Findings outside the task's scope, follow-ups, questions for the user | the workspace plan file (`PLAN.md` in the folder that holds the repositories), each session in its own section | no |
+| Where the work stands, findings outside the task's scope, follow-ups, questions for the user, input only an outside party can supply | the repository's four session files — `docs/now.md`, `docs/plan.md`, `docs/questions.md`, `docs/missing.md` | only in a private repository; a public one lists them in `.git/info/exclude` |
 
 Do not create task-, plan- or status-files in `docs/`.
 
@@ -52,6 +52,26 @@ A form submits the values its inputs hold; the schema only validates.
 The throttler limits come from `THROTTLE_TTL` and `THROTTLE_LIMIT`.
 ```
 
+## Feature documentation (after every turn)
+
+Every repository documents, in its `docs/`, how each of its features works: the mechanics and contracts of a Solidity repository, the exports of a package, the modules, endpoints and flows of a server, the screens and flows of an app. **One feature per file** (`docs/<feature>.md`, kebab-case, listed in `docs/README.md`); a feature too large for one file gets a folder `docs/<feature>/` with one file per part.
+
+- **After every turn that changes the repository** (code, tests, config, a commit), before the turn ends, bring the feature notes of what changed up to date. If the feature has no note yet, write it now, for the whole feature, not only the changed part. This is not left for a later docs PR.
+- **Exhaustive, for the current state.** A note says what the feature is for, who calls what (roles, entry points, events), the state and its transitions, where money / data / tokens go, the invariants and limits (by constant or config name), the errors and when they happen, and the edge cases a change must respect. Someone who has not read the code can use and change the feature from the note.
+- A turn that only reads or answers changes nothing and needs no note. A change with no effect on any feature (formatting, a typo) says so in the report instead.
+- The same rules as knowledge notes apply: no history, configuration by name, no secrets.
+
+The Stop hook checks it: a turn that changed a repository and touched no note in its `docs/` (other than the four session files and `docs/README.md`) is blocked once.
+
+## Every question to the user is written down before it is asked
+
+A question asked only in chat is lost when the context ends. Hard rules:
+
+1. **Write first, then ask.** Before asking the user anything (chat text, a wrap-up question, AskUserQuestion), write it in the same turn as its own item in the repository's `docs/questions.md`: date, the question in one sentence, the options, what waits on it. The work it concerns gets its own item in `docs/plan.md` (what, why, the gate) and the question links to it.
+2. **No weight filter.** Every unanswered question goes there: speed and test-cycle time, refactoring, design, tooling, dependencies, a choice between two next steps, a request from another session that needs the user's yes. "It is only an optimisation" or "it is a side remark" is not a reason to skip it.
+3. **Its own item, never a clause.** Not a sentence inside another plan item, not the `Checked` line, not the reply text only.
+4. **Self-check before ending the turn.** Every question to the user in the reply has its item in `questions.md`; a question asked earlier and still unanswered is asked again and stays in the file until answered. Missing one is a mistake to admit in the reply.
+
 ## Architecture decision records (`docs/adr/`)
 
 Write an ADR when a decision is not obvious from the code and a future reader could take it for a mistake: an unusual structure, a rejected "obvious" alternative, a pinned version, a constraint imposed by a tool, a provider or production. Number sequentially, never reuse a number.
@@ -82,16 +102,23 @@ Before changing code that an ADR covers, read the ADR. If the change contradicts
 
 ## The plan file
 
-Write the item into the plan file in the same turn you notice it, before you answer. Mentioning it in the reply, telling another session or adding a rule is not a record: only the plan file is. A mistake of your own (a missed review finding, a wrong claim, a broken build you let through) is recorded the same way.
+Every repository keeps four session files in its `docs/`: `now.md` (where the work stands, rewritten after every finished step), `plan.md` (the work that is left), `questions.md` (every question waiting for the user) and `missing.md` (what only an outside party can supply). "The plan file" below means `docs/plan.md` of the repository the item concerns; the other three are named where they apply. Each opens with a `**Checked:**` line that is updated even when nothing is new. Nothing of this goes into the folder that holds the repositories. A public repository keeps the four files local: they are listed in its `.git/info/exclude` and never committed.
+
+Write the item into the plan file in the same turn you notice it, before you answer. Mentioning it in the reply, telling another session or adding a rule is not a record: only the session files are. A mistake of your own (a missed review finding, a wrong claim, a broken build you let through) is recorded the same way.
 
 While working on a task you notice things that are not part of it: a bug, a security hole, a test that never runs, a wrong doc, a rule the code breaks. They are out of scope, so you do not fix them now, and they are not ignored either. Write each one down in your section of the plan file, so it is picked up later.
 
 - One item per finding: where (`repo` + `file:line`), what is wrong and what it causes, the proposed fix if you have one, and what it waits for (after the pause, another session, a decision).
-- An item you cannot judge or fix without more information or a decision goes under **Needs the user** in your section, with the question in one sentence, and you tell the user about it in your report. Do not leave it for later silently.
-- Every question you asked the user that is still unanswered also goes under **Needs the user** — whether it scrolled away, was not noticed or could not be answered yet — with the date it was asked and what waits on it. Ask it again in your next report; remove it once answered, and write the answer where it belongs (a note, an ADR, the item it unblocks).
+- An item you cannot judge or fix without a decision goes into the repository's `docs/questions.md`, with the question in one sentence, and you tell the user about it in your report; one that waits on input only an outside party can supply (a deploy, a key, console access, a third party) goes into its `docs/missing.md`. Do not leave it for later silently.
+- Every question you asked the user that is still unanswered also goes into `docs/questions.md` — whether it scrolled away, was not noticed or could not be answered yet — with the date it was asked and what waits on it. Ask it again in your next report; remove it once answered, and write the answer where it belongs (a note, an ADR, the item it unblocks).
 - Security holes and data loss are marked as such and named in the report every time until they are taken into work.
 - Remove an item when it is done or becomes a GitHub issue or PR (link it). The plan file is not a status log or a history of the session: what was merged is in git.
-- Edit only your own section. A finding for another session's area goes into your section under "for <session>", and you tell that session.
+- Write the files of the repositories you own. A finding in a repository another session owns goes into that repository's `docs/plan.md` under a heading that names you, and you tell the user.
+
+## Names and keys
+
+- The company was renamed from GemUnion to EthBerry: `gemunion` becomes `ethberry` everywhere (`Gemunion` → `EthBerry`), except history (CHANGELOGs, tags, lock files, generated artifacts) and quotes of real people. External resource names (buckets, queues, secrets) change only together with the deployment.
+- Keys committed in the repositories are test keys and stay. Only the public Besu test accounts are described in docs, by address with a link to their source; other keys are not described anywhere.
 
 ## Package READMEs
 
@@ -99,4 +126,4 @@ A published package's `README.md` describes its current public API for a consume
 
 ## Before finishing a task
 
-Check whether the task changed something a note, an ADR, `AGENTS.md` or a README states. Update them in the same change, and add follow-ups to the plan file instead of fixing unrelated things.
+Check whether the task changed something a note, an ADR, `AGENTS.md` or a README states, and write the feature notes the task touched ("Feature documentation" above). Update them in the same change, and add follow-ups to the plan file instead of fixing unrelated things.

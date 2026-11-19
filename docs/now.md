@@ -2,14 +2,14 @@
 
 The resume point for this repository. A session that lost its context reads this first, then the files it links. Rewritten after every finished step, before the turn ends; about a screen long. Owned by the Packages session (the workspace rule Resume point).
 
-**Checked:** 2026-11-19 (Packages, published file list).
+**Checked:** 2026-11-19 (Packages, publishing note and documentation rule sync).
 
-**Repository.** PR #457 (`chore/npmignore-agent-files`) open, not merged.
+**Repository.** PR #458 (`chore/sync-documentation-rule`) open, not merged.
 
-**Done since the last step.** `.npmignore` now leaves out `AGENTS.md`, `CLAUDE.md`; `npm pack --dry-run` outside `dist` lists only LICENSE, README.md and package.json. Tests, stories and test configs were already excluded.
+**Done since the last step.** `.claude/rules/documentation.md` synced from agent-kit (feature notes after every turn; the base `python.md` rule came with the sync). New feature note [publishing.md](publishing.md): build, published files, versions, peers, manual and CI release, secrets; listed in [README.md](README.md).
 
-**Waits on the user.** Merge of #457, then a patch release.
+**Waits on the user.** Merge of #458.
 
-**Next.** Merge and a patch release.
+**Next.** See [plan.md](plan.md).
 
 **Running.** Nothing.
