@@ -31,3 +31,8 @@ tsconfig.jest.json
 .storybook
 .env
 .env.*
+
+# agent instructions and local dev-chain files are not published
+/AGENTS.md
+/CLAUDE.md
+/docs
