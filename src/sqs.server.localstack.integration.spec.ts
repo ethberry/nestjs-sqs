@@ -1,6 +1,6 @@
-import { jest } from "@jest/globals";
 import { randomUUID } from "node:crypto";
 
+import { jest } from "@jest/globals";
 import { Controller, INestApplication, Inject, Injectable, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -91,7 +91,7 @@ async function drainQueue(client: SQSClient, queueUrl: string): Promise<void> {
   }
 }
 
-async function waitForSpyCalls(spy: jest.Spied<any>, count: number, timeoutMs: number): Promise<void> {
+async function waitForSpyCalls(spy: { mock: { calls: unknown[][] } }, count: number, timeoutMs: number): Promise<void> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (spy.mock.calls.length >= count) {
@@ -112,7 +112,7 @@ class SqsService {
     private readonly sqsClientProxy: ClientProxy,
   ) {}
 
-  public receive<T = any>(data: T): Promise<T> {
+  public receive<T>(data: T): Promise<T> {
     return Promise.resolve(data);
   }
 
@@ -121,18 +121,18 @@ class SqsService {
     return this.receive(data);
   }
 
-  public emit(data: any): Promise<void> {
-    const res = this.sqsClientProxy.emit<void, any>(EVENT_NAME, data);
+  public emit(data: unknown): Promise<void> {
+    const res = this.sqsClientProxy.emit<void, unknown>(EVENT_NAME, data);
     return firstValueFrom(res);
   }
 
-  public send(data: any): Promise<any> {
-    const res = this.sqsClientProxy.send<string, any>(EVENT_NAME, data);
+  public send(data: unknown): Promise<unknown> {
+    const res = this.sqsClientProxy.send<unknown, unknown>(EVENT_NAME, data);
     return firstValueFrom(res);
   }
 
-  public error(data: any): Promise<any> {
-    const res = this.sqsClientProxy.send<string, any>("NON_EXISTING_EVENT_NAME", data);
+  public error(data: unknown): Promise<unknown> {
+    const res = this.sqsClientProxy.send<unknown, unknown>("NON_EXISTING_EVENT_NAME", data);
     return firstValueFrom(res);
   }
 }
@@ -142,17 +142,17 @@ class SqsController {
   constructor(private readonly sqsService: SqsService) {}
 
   @MessagePattern(EVENT_NAME)
-  public receive<T = any>(@Payload() data: T): Promise<T> {
+  public receive<T>(@Payload() data: T): Promise<T> {
     return this.sqsService.receive(data);
   }
 
   @MessagePattern(OBJECT_PATTERN)
-  public receive2<T = any>(@Payload() data: T): Promise<T> {
+  public receive2<T>(@Payload() data: T): Promise<T> {
     return this.sqsService.receive(data);
   }
 
   @MessagePattern(CONTEXT_SANITY_PATTERN)
-  public receive3<T = any>(@Payload() data: T, @Ctx() ctx: SqsContext): Promise<T> {
+  public receive3<T>(@Payload() data: T, @Ctx() ctx: SqsContext): Promise<T> {
     return this.sqsService.receiveWithContext(data, ctx);
   }
 }
@@ -321,7 +321,7 @@ describe("SqsServer (standard queues, LocalStack)", () => {
   });
 
   describe("SqsService (LocalStack, standard)", () => {
-    let logSpy: jest.Spied<any>;
+    let logSpy: jest.Spied<SqsService["receive"]>;
 
     beforeEach(() => {
       logSpy = jest.spyOn(sqsService, "receive");
@@ -502,7 +502,7 @@ describe("SqsServer (FIFO queues, LocalStack)", () => {
   });
 
   describe("SqsService (LocalStack, FIFO)", () => {
-    let logSpy: jest.Spied<any>;
+    let logSpy: jest.Spied<SqsService["receive"]>;
 
     beforeEach(async () => {
       await drainQueue(sqs, consumerUrl);

@@ -103,7 +103,7 @@ export class SqsServer extends Server implements CustomTransportStrategy {
 
     if (!handler) {
       const serializedPacket = this.serializer.serialize({
-        id: data.id,
+        id,
         status: "error",
         err: NO_MESSAGE_HANDLER,
       }) as IProducerWireMessage;
