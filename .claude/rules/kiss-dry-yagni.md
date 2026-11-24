@@ -4,6 +4,15 @@
 
 Applies to every file in every repository. Apply it while writing, then run it as a separate pass over the full diff before a task is finished and again before any commit. Do not finish or commit a change that fails the pass.
 
+## Occam's razor: no new entities
+
+The user's rule (2026-11-19): do not create new entities when what exists is enough.
+
+- Before adding anything (a script, a generator, a file, a helper, a dependency, a tool, a config, a build step, a package export), check whether something already in the project, its tools or its standard library does the job, and use that.
+- A new dependency or tool only when nothing existing can do it, and only with the user's yes.
+- No custom generators or build scripts where the standard means of the stack work (the compiler's own output, the framework's own features).
+- When choosing between options, pick the one that adds the fewest new things; "it would be nicer" is not a reason to add one.
+
 ## KISS
 
 Ship the smallest change that fixes the current case. Do not add a service, endpoint, helper, or abstraction for a single call site.
