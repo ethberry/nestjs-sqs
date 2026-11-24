@@ -27,7 +27,7 @@ The Nest **API** stays familiar: `@MessagePattern` / `@EventPattern`, `ClientPro
 
 ## Requirements
 
-- **Node.js 24+** (will run on 22, but not tested)
+- **Node.js 26+**
 
 ## Installation
 

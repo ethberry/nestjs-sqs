@@ -11,6 +11,7 @@ How the packages of this repository are built, what goes into a published packag
 ## Build
 
 - `npm run build` compiles with `tsc` into `dist/` (`prebuild` empties it). ESM: `"type": "module"`, `module`/`moduleResolution` `nodenext`, exports from `dist/index.js` with `.d.ts` and source maps.
+- Runtime: Node 26. `.nvmrc` holds the major, every `package.json` has `engines.node` `">=26"`, and the workflows use `node-version: "26.x"`; a local build or release runs under `nvm use` (the `.nvmrc` version).
 - Targets in use: es2022 (1). A package that must run in older engines is the exception, not the rule; es5 is not used (async ESM code needs ES2015+).
 - Tests, stories and test helpers are excluded from the build by the `exclude` list of each `tsconfig.json` (`*.spec.*`, `*.test.*`, `*.stories.*`, `test-utils.*`, `jest.setup.*`, `__mocks__`); tests type-check through `tsconfig.test.json` where a package has one. The `.npmignore` drops them again, so a leaked compiled spec would still not ship.
 - Not obfuscated: single-package repositories publish plain code (ADR 0001 in common-packages).
