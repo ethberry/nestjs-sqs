@@ -4,14 +4,14 @@ name: Manual release Publish
 on:
   workflow_dispatch:
     inputs:
+      # always explicit and never a major: a breaking change ships as a minor
       bump:
-        description: "Version bump (patch, minor or major)"
+        description: "Version bump (minor or patch; a breaking change ships as a minor)"
         type: choice
+        required: true
         options:
           - patch
           - minor
-          - major
-        default: patch
 
 jobs:
   user-publish:
