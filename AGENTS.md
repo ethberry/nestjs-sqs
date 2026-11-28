@@ -13,7 +13,7 @@ Level 1: no dependencies on other `@ethberry/*` runtime packages. Released befor
 - Build: `npm run build` (`tsc`). Lint: `npm run lint`.
 - Tests: `npm run test:unit` (`*.unit.spec.ts`); `npm run test:integration` (`*.integration.spec.ts`) needs a local SQS: `npm run docker:sqs:up` starts ElasticMQ from `docker-compose.yml` with `elasticmq.conf`, and `docker:sqs:down` stops it. `npm run test` runs both.
 - CI (`ci-test.yml`) on a PR: starts ElasticMQ in Docker, then install, build, lint, test.
-- Release: `gh workflow run manual.yml --repo ethberry/nestjs-sqs --ref main -f bump=patch|minor|major`. The workflow runs `npm version` and publishes to GitHub Packages and to npmjs (public).
+- Release: `gh workflow run manual.yml --repo ethberry/nestjs-sqs --ref main -f bump=patch|minor` (required; never a major, a breaking change ships as a minor). The workflow runs `npm version` and publishes to GitHub Packages and to npmjs (public).
 
 ## Gotchas
 

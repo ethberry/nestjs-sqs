@@ -29,7 +29,7 @@ How the packages of this repository are built, what goes into a published packag
 
 ## Versions
 
-- `npm version patch|minor|major` (chosen by hand from the changes): bumps `package.json`, commits `[Manual release] [skip ci] <version>`, tags `v<version>`.
+- `npm version patch|minor` (chosen by hand from the changes; never a major, a breaking change ships as a minor): bumps `package.json`, commits `[Manual release] [skip ci] <version>`, tags `v<version>`.
 
 ## Release
 
@@ -38,7 +38,7 @@ Registries: GitHub Packages `https://npm.pkg.github.com/` and npmjs `https://reg
 **Manual (local), the usual way while GitHub Actions minutes are out**, from a clean checkout of `origin/main`:
 
 1. `git fetch && git checkout -B main origin/main`; `npm ci`; `npm run build`.
-2. `npm version patch|minor|major -m '[Manual release] [skip ci] %s'`.
+2. `npm version patch|minor -m '[Manual release] [skip ci] %s'`.
 3. GitHub Packages: `npm publish --@ethberry:registry=https://npm.pkg.github.com/` — the scope flag is required: the repository `.npmrc` maps `@ethberry` to npmjs, which overrides a plain `--registry`.
 4. npmjs: `npm publish --access public` with a user config that maps `@ethberry` to npmjs and holds `//registry.npmjs.org/:_authToken=${NPM_TOKEN}` (the token only in the environment, never in a file in the repository).
 5. `git push && git push --tags`.
@@ -48,6 +48,6 @@ A 401 from npmjs (`npm whoami`) means the token expired or was revoked; a 404 on
 **CI** (GitHub Actions):
 
 - `ci-test.yml`: tests on pull requests.
-- `manual.yml`: workflow_dispatch release with input `bump` (patch | minor | major): the manual steps above, both registries.
+- `manual.yml`: workflow_dispatch release with required input `bump` (patch | minor; there is no major option): the manual steps above, both registries.
 
 Secrets the workflows read: `GITHUBEMAIL`, `GITHUBTOKEN`, `GITHUBUSER`, `NPM_TOKEN`. `NPM_TOKEN` is an npmjs token that can publish `@ethberry/*`; `GITHUBTOKEN` / `GITHUBUSER` / `GITHUBEMAIL` push the release commit and publish to GitHub Packages.

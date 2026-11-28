@@ -4,7 +4,7 @@
 .claude/rules/kiss-dry-yagni.md	00a2e9fb4e9145e2cfce7fd285a67dfcff17a5e98c7a3ee7bc7e000c7f9453f1
 .claude/rules/long-running.md	1606f0febf1f5dfb568fb25285e927a3e3c78e10a8253ffeb02ccfac3a743961
 .claude/rules/nestjs.md	8c2d1dea9c304316888467daf0dfba686c48b5b84e7d5f1e5c0959063c955050
-.claude/rules/packages.md	1038d3d1547e54235aaa5ed1379054c3029c2067448d2071e08131f83abc078d
+.claude/rules/packages.md	84b9293ecc974f46fade3b4ead193d277b7cf3b8209328a60054c38ca2af0dcb
 .claude/rules/python.md	bcab4e5a5b1c67499647d8879f734f9b1942ede1c946808cfc0c61f3d7b61028
 .claude/rules/repository-boundaries.md	d3ed189038436d3dca6b8f63fade2038407db61027fcc643a83bba7ef952c09a
 .claude/rules/testing-nest.md
